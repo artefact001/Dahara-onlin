@@ -28,55 +28,6 @@ export const Route = createFileRoute("/")({
   component: Index,
 });
 
-const SUBJECTS = ["Coran", "Arabe", "Tajwid", "Hadith", "Fiqh"];
-
-type Teacher = {
-  name: string;
-  photo: string;
-  subjects: string;
-  meta: string;
-  rating: string;
-  languages: string[];
-  price: string;
-  session: string;
-  days: string;
-};
-
-const TEACHERS: Teacher[] = [
-  {
-    name: "Ustadh Abdou",
-    photo: teacherAbdou,
-    subjects: "Arabe · Coran · Tajwid",
-    meta: "8 ans d'expérience · Dakar",
-    rating: "4,9",
-    languages: ["Wolof", "Français", "العربية"],
-    price: "5 000",
-    session: "/ séance · 45 min",
-    days: "Lun · Mer · Sam",
-  },
-  {
-    name: "Mme Aïcha Sarr",
-    photo: teacherAicha,
-    subjects: "Tajwid · Lecture du Coran",
-    meta: "6 ans d'expérience · Saint-Louis",
-    rating: "5,0",
-    languages: ["Wolof", "العربية"],
-    price: "4 000",
-    session: "/ séance · 40 min",
-    days: "Mar · Jeu",
-  },
-  {
-    name: "Cheikh Moussa",
-    photo: teacherMoussa,
-    subjects: "Hadith · Fiqh · Sirah",
-    meta: "11 ans d'expérience · Thiès",
-    rating: "4,8",
-    languages: ["Français", "العربية"],
-    price: "6 500",
-    session: "/ séance · 60 min",
-    days: "Sam · Dim",
-  },
-];
 
 function Index() {
   const [activeSubject, setActiveSubject] = useState("Coran");
