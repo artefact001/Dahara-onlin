@@ -10,33 +10,153 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as AProposRouteImport } from './routes/a-propos'
+import { Route as BibliothequeRouteImport } from './routes/bibliotheque'
+import { Route as ContactRouteImport } from './routes/contact'
+import { Route as CoranRouteImport } from './routes/coran'
+import { Route as DevenirProfesseurRouteImport } from './routes/devenir-professeur'
+import { Route as MonDaharaRouteImport } from './routes/mon-dahara'
+import { Route as ProfesseursRouteImport } from './routes/professeurs'
+import { Route as TarifsRouteImport } from './routes/tarifs'
+import { Route as ProfesseursSlugRouteImport } from './routes/professeurs.$slug'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AProposRoute = AProposRouteImport.update({
+  id: '/a-propos',
+  path: '/a-propos',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const BibliothequeRoute = BibliothequeRouteImport.update({
+  id: '/bibliotheque',
+  path: '/bibliotheque',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ContactRoute = ContactRouteImport.update({
+  id: '/contact',
+  path: '/contact',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CoranRoute = CoranRouteImport.update({
+  id: '/coran',
+  path: '/coran',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const DevenirProfesseurRoute = DevenirProfesseurRouteImport.update({
+  id: '/devenir-professeur',
+  path: '/devenir-professeur',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const MonDaharaRoute = MonDaharaRouteImport.update({
+  id: '/mon-dahara',
+  path: '/mon-dahara',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ProfesseursRoute = ProfesseursRouteImport.update({
+  id: '/professeurs',
+  path: '/professeurs',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const TarifsRoute = TarifsRouteImport.update({
+  id: '/tarifs',
+  path: '/tarifs',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ProfesseursSlugRoute = ProfesseursSlugRouteImport.update({
+  id: '/$slug',
+  path: '/$slug',
+  getParentRoute: () => ProfesseursRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/a-propos': typeof AProposRoute
+  '/bibliotheque': typeof BibliothequeRoute
+  '/contact': typeof ContactRoute
+  '/coran': typeof CoranRoute
+  '/devenir-professeur': typeof DevenirProfesseurRoute
+  '/mon-dahara': typeof MonDaharaRoute
+  '/professeurs': typeof ProfesseursRouteWithChildren
+  '/tarifs': typeof TarifsRoute
+  '/professeurs/$slug': typeof ProfesseursSlugRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/a-propos': typeof AProposRoute
+  '/bibliotheque': typeof BibliothequeRoute
+  '/contact': typeof ContactRoute
+  '/coran': typeof CoranRoute
+  '/devenir-professeur': typeof DevenirProfesseurRoute
+  '/mon-dahara': typeof MonDaharaRoute
+  '/professeurs': typeof ProfesseursRouteWithChildren
+  '/tarifs': typeof TarifsRoute
+  '/professeurs/$slug': typeof ProfesseursSlugRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/a-propos': typeof AProposRoute
+  '/bibliotheque': typeof BibliothequeRoute
+  '/contact': typeof ContactRoute
+  '/coran': typeof CoranRoute
+  '/devenir-professeur': typeof DevenirProfesseurRoute
+  '/mon-dahara': typeof MonDaharaRoute
+  '/professeurs': typeof ProfesseursRouteWithChildren
+  '/tarifs': typeof TarifsRoute
+  '/professeurs/$slug': typeof ProfesseursSlugRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/'
+  fullPaths:
+    | '/'
+    | '/a-propos'
+    | '/bibliotheque'
+    | '/contact'
+    | '/coran'
+    | '/devenir-professeur'
+    | '/mon-dahara'
+    | '/professeurs'
+    | '/tarifs'
+    | '/professeurs/$slug'
   fileRoutesByTo: FileRoutesByTo
-  to: '/'
-  id: '__root__' | '/'
+  to:
+    | '/'
+    | '/a-propos'
+    | '/bibliotheque'
+    | '/contact'
+    | '/coran'
+    | '/devenir-professeur'
+    | '/mon-dahara'
+    | '/professeurs'
+    | '/tarifs'
+    | '/professeurs/$slug'
+  id:
+    | '__root__'
+    | '/'
+    | '/a-propos'
+    | '/bibliotheque'
+    | '/contact'
+    | '/coran'
+    | '/devenir-professeur'
+    | '/mon-dahara'
+    | '/professeurs'
+    | '/tarifs'
+    | '/professeurs/$slug'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AProposRoute: typeof AProposRoute
+  BibliothequeRoute: typeof BibliothequeRoute
+  ContactRoute: typeof ContactRoute
+  CoranRoute: typeof CoranRoute
+  DevenirProfesseurRoute: typeof DevenirProfesseurRoute
+  MonDaharaRoute: typeof MonDaharaRoute
+  ProfesseursRoute: typeof ProfesseursRouteWithChildren
+  TarifsRoute: typeof TarifsRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -48,11 +168,94 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/a-propos': {
+      id: '/a-propos'
+      path: '/a-propos'
+      fullPath: '/a-propos'
+      preLoaderRoute: typeof AProposRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/bibliotheque': {
+      id: '/bibliotheque'
+      path: '/bibliotheque'
+      fullPath: '/bibliotheque'
+      preLoaderRoute: typeof BibliothequeRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/contact': {
+      id: '/contact'
+      path: '/contact'
+      fullPath: '/contact'
+      preLoaderRoute: typeof ContactRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/coran': {
+      id: '/coran'
+      path: '/coran'
+      fullPath: '/coran'
+      preLoaderRoute: typeof CoranRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/devenir-professeur': {
+      id: '/devenir-professeur'
+      path: '/devenir-professeur'
+      fullPath: '/devenir-professeur'
+      preLoaderRoute: typeof DevenirProfesseurRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/mon-dahara': {
+      id: '/mon-dahara'
+      path: '/mon-dahara'
+      fullPath: '/mon-dahara'
+      preLoaderRoute: typeof MonDaharaRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/professeurs': {
+      id: '/professeurs'
+      path: '/professeurs'
+      fullPath: '/professeurs'
+      preLoaderRoute: typeof ProfesseursRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/tarifs': {
+      id: '/tarifs'
+      path: '/tarifs'
+      fullPath: '/tarifs'
+      preLoaderRoute: typeof TarifsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/professeurs/$slug': {
+      id: '/professeurs/$slug'
+      path: '/$slug'
+      fullPath: '/professeurs/$slug'
+      preLoaderRoute: typeof ProfesseursSlugRouteImport
+      parentRoute: typeof ProfesseursRoute
+    }
   }
 }
 
+interface ProfesseursRouteChildren {
+  ProfesseursSlugRoute: typeof ProfesseursSlugRoute
+}
+
+const ProfesseursRouteChildren: ProfesseursRouteChildren = {
+  ProfesseursSlugRoute: ProfesseursSlugRoute,
+}
+
+const ProfesseursRouteWithChildren = ProfesseursRoute._addFileChildren(
+  ProfesseursRouteChildren,
+)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AProposRoute: AProposRoute,
+  BibliothequeRoute: BibliothequeRoute,
+  ContactRoute: ContactRoute,
+  CoranRoute: CoranRoute,
+  DevenirProfesseurRoute: DevenirProfesseurRoute,
+  MonDaharaRoute: MonDaharaRoute,
+  ProfesseursRoute: ProfesseursRouteWithChildren,
+  TarifsRoute: TarifsRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

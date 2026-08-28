@@ -1,10 +1,10 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@tanstack/react-router";
 import { useState } from "react";
 
 import heroDahra from "@/assets/hero-dahra.jpg";
-import teacherAbdou from "@/assets/teacher-abdou.jpg";
-import teacherAicha from "@/assets/teacher-aicha.jpg";
-import teacherMoussa from "@/assets/teacher-moussa.jpg";
+import { SiteFooter } from "@/components/site-footer";
+import { SiteHeader } from "@/components/site-header";
+import { SUBJECTS, TEACHERS } from "@/lib/site-data";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -28,90 +28,13 @@ export const Route = createFileRoute("/")({
   component: Index,
 });
 
-const SUBJECTS = ["Coran", "Arabe", "Tajwid", "Hadith", "Fiqh"];
-
-type Teacher = {
-  name: string;
-  photo: string;
-  subjects: string;
-  meta: string;
-  rating: string;
-  languages: string[];
-  price: string;
-  session: string;
-  days: string;
-};
-
-const TEACHERS: Teacher[] = [
-  {
-    name: "Ustadh Abdou",
-    photo: teacherAbdou,
-    subjects: "Arabe · Coran · Tajwid",
-    meta: "8 ans d'expérience · Dakar",
-    rating: "4,9",
-    languages: ["Wolof", "Français", "العربية"],
-    price: "5 000",
-    session: "/ séance · 45 min",
-    days: "Lun · Mer · Sam",
-  },
-  {
-    name: "Mme Aïcha Sarr",
-    photo: teacherAicha,
-    subjects: "Tajwid · Lecture du Coran",
-    meta: "6 ans d'expérience · Saint-Louis",
-    rating: "5,0",
-    languages: ["Wolof", "العربية"],
-    price: "4 000",
-    session: "/ séance · 40 min",
-    days: "Mar · Jeu",
-  },
-  {
-    name: "Cheikh Moussa",
-    photo: teacherMoussa,
-    subjects: "Hadith · Fiqh · Sirah",
-    meta: "11 ans d'expérience · Thiès",
-    rating: "4,8",
-    languages: ["Français", "العربية"],
-    price: "6 500",
-    session: "/ séance · 60 min",
-    days: "Sam · Dim",
-  },
-];
 
 function Index() {
   const [activeSubject, setActiveSubject] = useState("Coran");
 
   return (
     <div className="bg-cream text-ink font-body">
-      {/* NAV */}
-      <header className="bg-cream/90 border-b border-ink/10 sticky top-0 z-50 backdrop-blur">
-        <div className="max-w-7xl mx-auto px-5 sm:px-8 h-16 flex items-center justify-between gap-4">
-          <div className="flex items-center gap-3">
-            <div className="size-9 grid place-items-center bg-forest text-cream rounded-[10px] font-display text-lg leading-none">
-              D
-            </div>
-            <span className="font-display text-lg tracking-tight text-ink">
-              Dahara <span className="text-ink-soft/70">Online</span>
-            </span>
-          </div>
-          <nav className="hidden md:flex items-center gap-7 text-sm text-ink-soft">
-            <a href="#professeurs" className="text-ink">
-              Professeurs
-            </a>
-            <a href="#mon-dahara">Mon Dahara</a>
-            <a href="#professeurs">Coran</a>
-            <a href="#mon-dahara">Bibliothèque</a>
-          </nav>
-          <div className="flex items-center gap-2.5">
-            <button className="hidden sm:block text-sm text-ink-soft hover:text-ink">
-              Se connecter
-            </button>
-            <button className="text-sm font-medium bg-forest text-cream rounded-[10px] px-4 py-2 ring-1 ring-forest-deep/20 transition-transform hover:-translate-y-0.5">
-              Commencer
-            </button>
-          </div>
-        </div>
-      </header>
+      <SiteHeader />
 
       {/* HERO */}
       <section className="bg-cream">
@@ -130,18 +53,18 @@ function Index() {
                 diaspora.
               </p>
               <div className="mt-8 flex flex-wrap items-center gap-3">
-                <a
-                  href="#professeurs"
+                <Link
+                  to="/professeurs"
                   className="text-sm font-medium bg-terra text-cream rounded-[10px] px-5 py-3 ring-1 ring-terra-deep/30 transition-transform hover:-translate-y-0.5"
                 >
                   Trouver un professeur
-                </a>
-                <a
-                  href="#mon-dahara"
+                </Link>
+                <Link
+                  to="/tarifs"
                   className="text-sm font-medium text-ink border border-ink/20 rounded-[10px] px-5 py-3 hover:bg-sand/60"
                 >
                   Commencer gratuitement
-                </a>
+                </Link>
               </div>
               <div className="mt-10 flex items-center gap-6 text-sm text-ink-soft">
                 <div className="flex items-center gap-2">
@@ -360,29 +283,20 @@ function Index() {
                     {teacher.days}
                   </span>
                 </div>
-                <button className="mt-4 w-full text-sm font-medium text-forest border border-forest/25 rounded-[10px] py-2.5 hover:bg-forest/5">
+                <Link
+                  to="/professeurs/$slug"
+                  params={{ slug: teacher.slug }}
+                  className="mt-4 block text-center w-full text-sm font-medium text-forest border border-forest/25 rounded-[10px] py-2.5 hover:bg-forest/5"
+                >
                   Réserver une séance
-                </button>
+                </Link>
               </article>
             ))}
           </div>
         </div>
       </section>
 
-      {/* FOOTER */}
-      <footer className="bg-forest-deep text-cream/70">
-        <div className="max-w-7xl mx-auto px-5 sm:px-8 py-12 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6">
-          <div>
-            <div className="font-display text-xl text-cream">Dahara Online</div>
-            <p className="mt-1 text-sm text-cream/50 max-w-[36ch]">
-              Le dahara dans votre poche. Transmettre le savoir, de Dakar au monde.
-            </p>
-          </div>
-          <div className="font-arabic text-2xl text-gold/80" dir="rtl" aria-hidden="true">
-            العلم نور
-          </div>
-        </div>
-      </footer>
+      <SiteFooter />
     </div>
   );
 }
