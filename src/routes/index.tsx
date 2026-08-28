@@ -283,29 +283,20 @@ function Index() {
                     {teacher.days}
                   </span>
                 </div>
-                <button className="mt-4 w-full text-sm font-medium text-forest border border-forest/25 rounded-[10px] py-2.5 hover:bg-forest/5">
+                <Link
+                  to="/professeurs/$slug"
+                  params={{ slug: teacher.slug }}
+                  className="mt-4 block text-center w-full text-sm font-medium text-forest border border-forest/25 rounded-[10px] py-2.5 hover:bg-forest/5"
+                >
                   Réserver une séance
-                </button>
+                </Link>
               </article>
             ))}
           </div>
         </div>
       </section>
 
-      {/* FOOTER */}
-      <footer className="bg-forest-deep text-cream/70">
-        <div className="max-w-7xl mx-auto px-5 sm:px-8 py-12 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6">
-          <div>
-            <div className="font-display text-xl text-cream">Dahara Online</div>
-            <p className="mt-1 text-sm text-cream/50 max-w-[36ch]">
-              Le dahara dans votre poche. Transmettre le savoir, de Dakar au monde.
-            </p>
-          </div>
-          <div className="font-arabic text-2xl text-gold/80" dir="rtl" aria-hidden="true">
-            العلم نور
-          </div>
-        </div>
-      </footer>
+      <SiteFooter />
     </div>
   );
 }
