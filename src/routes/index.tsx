@@ -34,35 +34,7 @@ function Index() {
 
   return (
     <div className="bg-cream text-ink font-body">
-      {/* NAV */}
-      <header className="bg-cream/90 border-b border-ink/10 sticky top-0 z-50 backdrop-blur">
-        <div className="max-w-7xl mx-auto px-5 sm:px-8 h-16 flex items-center justify-between gap-4">
-          <div className="flex items-center gap-3">
-            <div className="size-9 grid place-items-center bg-forest text-cream rounded-[10px] font-display text-lg leading-none">
-              D
-            </div>
-            <span className="font-display text-lg tracking-tight text-ink">
-              Dahara <span className="text-ink-soft/70">Online</span>
-            </span>
-          </div>
-          <nav className="hidden md:flex items-center gap-7 text-sm text-ink-soft">
-            <a href="#professeurs" className="text-ink">
-              Professeurs
-            </a>
-            <a href="#mon-dahara">Mon Dahara</a>
-            <a href="#professeurs">Coran</a>
-            <a href="#mon-dahara">Bibliothèque</a>
-          </nav>
-          <div className="flex items-center gap-2.5">
-            <button className="hidden sm:block text-sm text-ink-soft hover:text-ink">
-              Se connecter
-            </button>
-            <button className="text-sm font-medium bg-forest text-cream rounded-[10px] px-4 py-2 ring-1 ring-forest-deep/20 transition-transform hover:-translate-y-0.5">
-              Commencer
-            </button>
-          </div>
-        </div>
-      </header>
+      <SiteHeader />
 
       {/* HERO */}
       <section className="bg-cream">
