@@ -53,18 +53,18 @@ function Index() {
                 diaspora.
               </p>
               <div className="mt-8 flex flex-wrap items-center gap-3">
-                <a
-                  href="#professeurs"
+                <Link
+                  to="/professeurs"
                   className="text-sm font-medium bg-terra text-cream rounded-[10px] px-5 py-3 ring-1 ring-terra-deep/30 transition-transform hover:-translate-y-0.5"
                 >
                   Trouver un professeur
-                </a>
-                <a
-                  href="#mon-dahara"
+                </Link>
+                <Link
+                  to="/tarifs"
                   className="text-sm font-medium text-ink border border-ink/20 rounded-[10px] px-5 py-3 hover:bg-sand/60"
                 >
                   Commencer gratuitement
-                </a>
+                </Link>
               </div>
               <div className="mt-10 flex items-center gap-6 text-sm text-ink-soft">
                 <div className="flex items-center gap-2">
