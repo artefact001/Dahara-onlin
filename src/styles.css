@@ -19,6 +19,20 @@
  */
 
 @theme inline {
+  --color-ink: #182420;
+  --color-ink-soft: #37473f;
+  --color-sand: #ede5d3;
+  --color-sand-deep: #e1d5ba;
+  --color-cream: #f5efe1;
+  --color-forest: #28453a;
+  --color-forest-deep: #1c332b;
+  --color-terra: #bf6a44;
+  --color-terra-deep: #9c5233;
+  --color-gold: #c19a4e;
+  --font-display: "Fraunces", Georgia, serif;
+  --font-body: "IBM Plex Sans", system-ui, sans-serif;
+  --font-mono: "IBM Plex Mono", monospace;
+  --font-arabic: "Amiri", serif;
   --radius-sm: calc(var(--radius) - 4px);
   --radius-md: calc(var(--radius) - 2px);
   --radius-lg: var(--radius);
@@ -26,6 +40,7 @@
   --radius-2xl: calc(var(--radius) + 8px);
   --radius-3xl: calc(var(--radius) + 12px);
   --radius-4xl: calc(var(--radius) + 16px);
+
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --color-card: var(--card);
@@ -142,3 +157,42 @@
     color: var(--color-foreground);
   }
 }
+
+/* --- Dahara Online design system --- */
+:root {
+  --radius: 0.75rem;
+  --background: oklch(0.955 0.021 88);
+  --foreground: oklch(0.24 0.017 158);
+  --card: oklch(0.955 0.021 88);
+  --card-foreground: oklch(0.24 0.017 158);
+  --popover: oklch(0.955 0.021 88);
+  --popover-foreground: oklch(0.24 0.017 158);
+  --primary: oklch(0.34 0.043 161);
+  --primary-foreground: oklch(0.955 0.021 88);
+  --secondary: oklch(0.905 0.031 87);
+  --secondary-foreground: oklch(0.24 0.017 158);
+  --muted: oklch(0.905 0.031 87);
+  --muted-foreground: oklch(0.42 0.023 158);
+  --accent: oklch(0.585 0.106 41);
+  --accent-foreground: oklch(0.955 0.021 88);
+  --border: oklch(0.24 0.017 158 / 12%);
+  --input: oklch(0.24 0.017 158 / 12%);
+  --ring: oklch(0.585 0.106 41 / 40%);
+}
+
+@layer base {
+  body {
+    font-family: var(--font-body);
+    -webkit-font-smoothing: antialiased;
+  }
+  h1, h2, h3 {
+    font-family: var(--font-display);
+    font-optical-sizing: auto;
+  }
+}
+
+@keyframes barfill { from { width: 0; } }
+@keyframes fadein { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
+
+@utility animate-barfill { animation: barfill 1.4s ease; }
+@utility animate-fadein { animation: fadein 0.7s ease both; }
