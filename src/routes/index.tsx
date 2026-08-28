@@ -1,10 +1,10 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@tanstack/react-router";
 import { useState } from "react";
 
 import heroDahra from "@/assets/hero-dahra.jpg";
-import teacherAbdou from "@/assets/teacher-abdou.jpg";
-import teacherAicha from "@/assets/teacher-aicha.jpg";
-import teacherMoussa from "@/assets/teacher-moussa.jpg";
+import { SiteFooter } from "@/components/site-footer";
+import { SiteHeader } from "@/components/site-header";
+import { SUBJECTS, TEACHERS } from "@/lib/site-data";
 
 export const Route = createFileRoute("/")({
   head: () => ({

@@ -95,7 +95,11 @@ function TeacherPage() {
 
             <div className="mt-8 grid sm:grid-cols-3 gap-3">
               <Stat label="Note" value={`${teacher.rating}/5`} sub={`${teacher.reviews} avis`} />
-              <Stat label="Niveaux" value={teacher.levels[0]} sub={teacher.levels.join(" · ")} />
+              <Stat
+                label="Niveaux"
+                value={teacher.levels[0] ?? "Tous"}
+                sub={teacher.levels.join(" · ")}
+              />
               <Stat label="Ville" value={teacher.city} sub="Cours en ligne" />
             </div>
           </div>
