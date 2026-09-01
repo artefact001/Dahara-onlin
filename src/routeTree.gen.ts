@@ -10,14 +10,19 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/route'
 import { Route as AProposRouteImport } from './routes/a-propos'
+import { Route as AuthRouteImport } from './routes/auth'
 import { Route as BibliothequeRouteImport } from './routes/bibliotheque'
 import { Route as ContactRouteImport } from './routes/contact'
 import { Route as CoranRouteImport } from './routes/coran'
 import { Route as DevenirProfesseurRouteImport } from './routes/devenir-professeur'
-import { Route as MonDaharaRouteImport } from './routes/mon-dahara'
 import { Route as ProfesseursRouteImport } from './routes/professeurs'
 import { Route as TarifsRouteImport } from './routes/tarifs'
+import { Route as AuthenticatedMemorisationRouteImport } from './routes/_authenticated/memorisation'
+import { Route as AuthenticatedMonDaharaRouteImport } from './routes/_authenticated/mon-dahara'
+import { Route as AuthenticatedPrieresRouteImport } from './routes/_authenticated/prieres'
+import { Route as AuthenticatedProfilRouteImport } from './routes/_authenticated/profil'
 import { Route as ProfesseursSlugRouteImport } from './routes/professeurs.$slug'
 
 const IndexRoute = IndexRouteImport.update({
@@ -25,9 +30,18 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AuthenticatedRouteRoute = AuthenticatedRouteRouteImport.update({
+  id: '/_authenticated',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AProposRoute = AProposRouteImport.update({
   id: '/a-propos',
   path: '/a-propos',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AuthRoute = AuthRouteImport.update({
+  id: '/auth',
+  path: '/auth',
   getParentRoute: () => rootRouteImport,
 } as any)
 const BibliothequeRoute = BibliothequeRouteImport.update({
@@ -50,11 +64,6 @@ const DevenirProfesseurRoute = DevenirProfesseurRouteImport.update({
   path: '/devenir-professeur',
   getParentRoute: () => rootRouteImport,
 } as any)
-const MonDaharaRoute = MonDaharaRouteImport.update({
-  id: '/mon-dahara',
-  path: '/mon-dahara',
-  getParentRoute: () => rootRouteImport,
-} as any)
 const ProfesseursRoute = ProfesseursRouteImport.update({
   id: '/professeurs',
   path: '/professeurs',
@@ -65,6 +74,27 @@ const TarifsRoute = TarifsRouteImport.update({
   path: '/tarifs',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AuthenticatedMemorisationRoute =
+  AuthenticatedMemorisationRouteImport.update({
+    id: '/memorisation',
+    path: '/memorisation',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
+const AuthenticatedMonDaharaRoute = AuthenticatedMonDaharaRouteImport.update({
+  id: '/mon-dahara',
+  path: '/mon-dahara',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
+const AuthenticatedPrieresRoute = AuthenticatedPrieresRouteImport.update({
+  id: '/prieres',
+  path: '/prieres',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
+const AuthenticatedProfilRoute = AuthenticatedProfilRouteImport.update({
+  id: '/profil',
+  path: '/profil',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
 const ProfesseursSlugRoute = ProfesseursSlugRouteImport.update({
   id: '/$slug',
   path: '/$slug',
@@ -74,38 +104,51 @@ const ProfesseursSlugRoute = ProfesseursSlugRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/a-propos': typeof AProposRoute
+  '/auth': typeof AuthRoute
   '/bibliotheque': typeof BibliothequeRoute
   '/contact': typeof ContactRoute
   '/coran': typeof CoranRoute
   '/devenir-professeur': typeof DevenirProfesseurRoute
-  '/mon-dahara': typeof MonDaharaRoute
   '/professeurs': typeof ProfesseursRouteWithChildren
   '/tarifs': typeof TarifsRoute
+  '/memorisation': typeof AuthenticatedMemorisationRoute
+  '/mon-dahara': typeof AuthenticatedMonDaharaRoute
+  '/prieres': typeof AuthenticatedPrieresRoute
+  '/profil': typeof AuthenticatedProfilRoute
   '/professeurs/$slug': typeof ProfesseursSlugRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/a-propos': typeof AProposRoute
+  '/auth': typeof AuthRoute
   '/bibliotheque': typeof BibliothequeRoute
   '/contact': typeof ContactRoute
   '/coran': typeof CoranRoute
   '/devenir-professeur': typeof DevenirProfesseurRoute
-  '/mon-dahara': typeof MonDaharaRoute
   '/professeurs': typeof ProfesseursRouteWithChildren
   '/tarifs': typeof TarifsRoute
+  '/memorisation': typeof AuthenticatedMemorisationRoute
+  '/mon-dahara': typeof AuthenticatedMonDaharaRoute
+  '/prieres': typeof AuthenticatedPrieresRoute
+  '/profil': typeof AuthenticatedProfilRoute
   '/professeurs/$slug': typeof ProfesseursSlugRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/_authenticated': typeof AuthenticatedRouteRouteWithChildren
   '/a-propos': typeof AProposRoute
+  '/auth': typeof AuthRoute
   '/bibliotheque': typeof BibliothequeRoute
   '/contact': typeof ContactRoute
   '/coran': typeof CoranRoute
   '/devenir-professeur': typeof DevenirProfesseurRoute
-  '/mon-dahara': typeof MonDaharaRoute
   '/professeurs': typeof ProfesseursRouteWithChildren
   '/tarifs': typeof TarifsRoute
+  '/_authenticated/memorisation': typeof AuthenticatedMemorisationRoute
+  '/_authenticated/mon-dahara': typeof AuthenticatedMonDaharaRoute
+  '/_authenticated/prieres': typeof AuthenticatedPrieresRoute
+  '/_authenticated/profil': typeof AuthenticatedProfilRoute
   '/professeurs/$slug': typeof ProfesseursSlugRoute
 }
 export interface FileRouteTypes {
@@ -113,48 +156,62 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | '/a-propos'
+    | '/auth'
     | '/bibliotheque'
     | '/contact'
     | '/coran'
     | '/devenir-professeur'
-    | '/mon-dahara'
     | '/professeurs'
     | '/tarifs'
+    | '/memorisation'
+    | '/mon-dahara'
+    | '/prieres'
+    | '/profil'
     | '/professeurs/$slug'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
     | '/a-propos'
+    | '/auth'
     | '/bibliotheque'
     | '/contact'
     | '/coran'
     | '/devenir-professeur'
-    | '/mon-dahara'
     | '/professeurs'
     | '/tarifs'
+    | '/memorisation'
+    | '/mon-dahara'
+    | '/prieres'
+    | '/profil'
     | '/professeurs/$slug'
   id:
     | '__root__'
     | '/'
+    | '/_authenticated'
     | '/a-propos'
+    | '/auth'
     | '/bibliotheque'
     | '/contact'
     | '/coran'
     | '/devenir-professeur'
-    | '/mon-dahara'
     | '/professeurs'
     | '/tarifs'
+    | '/_authenticated/memorisation'
+    | '/_authenticated/mon-dahara'
+    | '/_authenticated/prieres'
+    | '/_authenticated/profil'
     | '/professeurs/$slug'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AuthenticatedRouteRoute: typeof AuthenticatedRouteRouteWithChildren
   AProposRoute: typeof AProposRoute
+  AuthRoute: typeof AuthRoute
   BibliothequeRoute: typeof BibliothequeRoute
   ContactRoute: typeof ContactRoute
   CoranRoute: typeof CoranRoute
   DevenirProfesseurRoute: typeof DevenirProfesseurRoute
-  MonDaharaRoute: typeof MonDaharaRoute
   ProfesseursRoute: typeof ProfesseursRouteWithChildren
   TarifsRoute: typeof TarifsRoute
 }
@@ -168,11 +225,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/_authenticated': {
+      id: '/_authenticated'
+      path: ''
+      fullPath: '/'
+      preLoaderRoute: typeof AuthenticatedRouteRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/a-propos': {
       id: '/a-propos'
       path: '/a-propos'
       fullPath: '/a-propos'
       preLoaderRoute: typeof AProposRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/auth': {
+      id: '/auth'
+      path: '/auth'
+      fullPath: '/auth'
+      preLoaderRoute: typeof AuthRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/bibliotheque': {
@@ -203,13 +274,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DevenirProfesseurRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/mon-dahara': {
-      id: '/mon-dahara'
-      path: '/mon-dahara'
-      fullPath: '/mon-dahara'
-      preLoaderRoute: typeof MonDaharaRouteImport
-      parentRoute: typeof rootRouteImport
-    }
     '/professeurs': {
       id: '/professeurs'
       path: '/professeurs'
@@ -224,6 +288,34 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof TarifsRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/_authenticated/memorisation': {
+      id: '/_authenticated/memorisation'
+      path: '/memorisation'
+      fullPath: '/memorisation'
+      preLoaderRoute: typeof AuthenticatedMemorisationRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/mon-dahara': {
+      id: '/_authenticated/mon-dahara'
+      path: '/mon-dahara'
+      fullPath: '/mon-dahara'
+      preLoaderRoute: typeof AuthenticatedMonDaharaRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/prieres': {
+      id: '/_authenticated/prieres'
+      path: '/prieres'
+      fullPath: '/prieres'
+      preLoaderRoute: typeof AuthenticatedPrieresRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/profil': {
+      id: '/_authenticated/profil'
+      path: '/profil'
+      fullPath: '/profil'
+      preLoaderRoute: typeof AuthenticatedProfilRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/professeurs/$slug': {
       id: '/professeurs/$slug'
       path: '/$slug'
@@ -233,6 +325,23 @@ declare module '@tanstack/react-router' {
     }
   }
 }
+
+interface AuthenticatedRouteRouteChildren {
+  AuthenticatedMemorisationRoute: typeof AuthenticatedMemorisationRoute
+  AuthenticatedMonDaharaRoute: typeof AuthenticatedMonDaharaRoute
+  AuthenticatedPrieresRoute: typeof AuthenticatedPrieresRoute
+  AuthenticatedProfilRoute: typeof AuthenticatedProfilRoute
+}
+
+const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
+  AuthenticatedMemorisationRoute: AuthenticatedMemorisationRoute,
+  AuthenticatedMonDaharaRoute: AuthenticatedMonDaharaRoute,
+  AuthenticatedPrieresRoute: AuthenticatedPrieresRoute,
+  AuthenticatedProfilRoute: AuthenticatedProfilRoute,
+}
+
+const AuthenticatedRouteRouteWithChildren =
+  AuthenticatedRouteRoute._addFileChildren(AuthenticatedRouteRouteChildren)
 
 interface ProfesseursRouteChildren {
   ProfesseursSlugRoute: typeof ProfesseursSlugRoute
@@ -248,12 +357,13 @@ const ProfesseursRouteWithChildren = ProfesseursRoute._addFileChildren(
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AuthenticatedRouteRoute: AuthenticatedRouteRouteWithChildren,
   AProposRoute: AProposRoute,
+  AuthRoute: AuthRoute,
   BibliothequeRoute: BibliothequeRoute,
   ContactRoute: ContactRoute,
   CoranRoute: CoranRoute,
   DevenirProfesseurRoute: DevenirProfesseurRoute,
-  MonDaharaRoute: MonDaharaRoute,
   ProfesseursRoute: ProfesseursRouteWithChildren,
   TarifsRoute: TarifsRoute,
 }
