@@ -77,11 +77,10 @@ function PrieresPage() {
   return (
     <div className="bg-cream text-ink font-body min-h-screen">
       <SiteHeader />
-      <PageHero
-        eyebrow="Prières"
-        title="Vos rappels, à l'heure de votre ville"
-        subtitle="Le calendrier du jour est calculé pour votre ville. Choisissez combien de minutes avant chaque prière vous souhaitez être averti."
-      />
+      <PageHero eyebrow="Prières" title="Vos rappels, à l'heure de votre ville">
+        Le calendrier du jour est calculé pour votre ville. Choisissez combien de minutes avant
+        chaque prière vous souhaitez être averti.
+      </PageHero>
 
       <section className="bg-cream">
         <div className="max-w-5xl mx-auto px-5 sm:px-8 py-14 grid lg:grid-cols-3 gap-8">
