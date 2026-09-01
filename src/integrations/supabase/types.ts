@@ -14,16 +14,291 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      goals: {
+        Row: {
+          created_at: string
+          current_value: number
+          id: string
+          label: string
+          period: string
+          target_value: number
+          unit: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          current_value?: number
+          id?: string
+          label: string
+          period?: string
+          target_value?: number
+          unit?: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          current_value?: number
+          id?: string
+          label?: string
+          period?: string
+          target_value?: number
+          unit?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      learning_paths: {
+        Row: {
+          created_at: string
+          description: string | null
+          id: string
+          title: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          description?: string | null
+          id?: string
+          title: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          description?: string | null
+          id?: string
+          title?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      memorization_sessions: {
+        Row: {
+          created_at: string
+          id: string
+          minutes: number
+          session_date: string
+          surah_number: number | null
+          user_id: string
+          verses: number
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          minutes?: number
+          session_date?: string
+          surah_number?: number | null
+          user_id: string
+          verses?: number
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          minutes?: number
+          session_date?: string
+          surah_number?: number | null
+          user_id?: string
+          verses?: number
+        }
+        Relationships: []
+      }
+      path_steps: {
+        Row: {
+          created_at: string
+          detail: string | null
+          id: string
+          path_id: string
+          position: number
+          status: Database["public"]["Enums"]["step_status"]
+          target_date: string | null
+          title: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          detail?: string | null
+          id?: string
+          path_id: string
+          position?: number
+          status?: Database["public"]["Enums"]["step_status"]
+          target_date?: string | null
+          title: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          detail?: string | null
+          id?: string
+          path_id?: string
+          position?: number
+          status?: Database["public"]["Enums"]["step_status"]
+          target_date?: string | null
+          title?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "path_steps_path_id_fkey"
+            columns: ["path_id"]
+            isOneToOne: false
+            referencedRelation: "learning_paths"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      prayer_reminders: {
+        Row: {
+          city: string
+          created_at: string
+          enabled: boolean
+          id: string
+          offset_minutes: number
+          prayer: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          city?: string
+          created_at?: string
+          enabled?: boolean
+          id?: string
+          offset_minutes?: number
+          prayer: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          city?: string
+          created_at?: string
+          enabled?: boolean
+          id?: string
+          offset_minutes?: number
+          prayer?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      profiles: {
+        Row: {
+          bio: string | null
+          city: string | null
+          created_at: string
+          daily_minutes_goal: number
+          full_name: string
+          id: string
+          is_teacher: boolean
+          languages: string[]
+          updated_at: string
+          weekly_verses_goal: number
+        }
+        Insert: {
+          bio?: string | null
+          city?: string | null
+          created_at?: string
+          daily_minutes_goal?: number
+          full_name?: string
+          id: string
+          is_teacher?: boolean
+          languages?: string[]
+          updated_at?: string
+          weekly_verses_goal?: number
+        }
+        Update: {
+          bio?: string | null
+          city?: string | null
+          created_at?: string
+          daily_minutes_goal?: number
+          full_name?: string
+          id?: string
+          is_teacher?: boolean
+          languages?: string[]
+          updated_at?: string
+          weekly_verses_goal?: number
+        }
+        Relationships: []
+      }
+      surah_progress: {
+        Row: {
+          created_at: string
+          id: string
+          last_reviewed_at: string | null
+          memorized_verses: number
+          surah_name: string
+          surah_number: number
+          total_verses: number
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          last_reviewed_at?: string | null
+          memorized_verses?: number
+          surah_name: string
+          surah_number: number
+          total_verses: number
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          last_reviewed_at?: string | null
+          memorized_verses?: number
+          surah_name?: string
+          surah_number?: number
+          total_verses?: number
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      user_roles: {
+        Row: {
+          created_at: string
+          id: string
+          role: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          role: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          role?: Database["public"]["Enums"]["app_role"]
+          user_id?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      has_role: {
+        Args: {
+          _role: Database["public"]["Enums"]["app_role"]
+          _user_id: string
+        }
+        Returns: boolean
+      }
     }
     Enums: {
-      [_ in never]: never
+      app_role: "eleve" | "professeur" | "admin"
+      step_status: "a_faire" | "en_cours" | "termine"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -150,6 +425,9 @@ export type CompositeTypes<
 
 export const Constants = {
   public: {
-    Enums: {},
+    Enums: {
+      app_role: ["eleve", "professeur", "admin"],
+      step_status: ["a_faire", "en_cours", "termine"],
+    },
   },
 } as const
