@@ -23,6 +23,7 @@ import { Route as AuthenticatedMemorisationRouteImport } from './routes/_authent
 import { Route as AuthenticatedMonDaharaRouteImport } from './routes/_authenticated/mon-dahara'
 import { Route as AuthenticatedPrieresRouteImport } from './routes/_authenticated/prieres'
 import { Route as AuthenticatedProfilRouteImport } from './routes/_authenticated/profil'
+import { Route as AuthenticatedReservationsRouteImport } from './routes/_authenticated/reservations'
 import { Route as BibliothequeSlugRouteImport } from './routes/bibliotheque.$slug'
 import { Route as ProfesseursSlugRouteImport } from './routes/professeurs.$slug'
 
@@ -96,6 +97,12 @@ const AuthenticatedProfilRoute = AuthenticatedProfilRouteImport.update({
   path: '/profil',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
+const AuthenticatedReservationsRoute =
+  AuthenticatedReservationsRouteImport.update({
+    id: '/reservations',
+    path: '/reservations',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
 const BibliothequeSlugRoute = BibliothequeSlugRouteImport.update({
   id: '/$slug',
   path: '/$slug',
@@ -121,6 +128,7 @@ export interface FileRoutesByFullPath {
   '/mon-dahara': typeof AuthenticatedMonDaharaRoute
   '/prieres': typeof AuthenticatedPrieresRoute
   '/profil': typeof AuthenticatedProfilRoute
+  '/reservations': typeof AuthenticatedReservationsRoute
   '/bibliotheque/$slug': typeof BibliothequeSlugRoute
   '/professeurs/$slug': typeof ProfesseursSlugRoute
 }
@@ -138,6 +146,7 @@ export interface FileRoutesByTo {
   '/mon-dahara': typeof AuthenticatedMonDaharaRoute
   '/prieres': typeof AuthenticatedPrieresRoute
   '/profil': typeof AuthenticatedProfilRoute
+  '/reservations': typeof AuthenticatedReservationsRoute
   '/bibliotheque/$slug': typeof BibliothequeSlugRoute
   '/professeurs/$slug': typeof ProfesseursSlugRoute
 }
@@ -157,6 +166,7 @@ export interface FileRoutesById {
   '/_authenticated/mon-dahara': typeof AuthenticatedMonDaharaRoute
   '/_authenticated/prieres': typeof AuthenticatedPrieresRoute
   '/_authenticated/profil': typeof AuthenticatedProfilRoute
+  '/_authenticated/reservations': typeof AuthenticatedReservationsRoute
   '/bibliotheque/$slug': typeof BibliothequeSlugRoute
   '/professeurs/$slug': typeof ProfesseursSlugRoute
 }
@@ -176,6 +186,7 @@ export interface FileRouteTypes {
     | '/mon-dahara'
     | '/prieres'
     | '/profil'
+    | '/reservations'
     | '/bibliotheque/$slug'
     | '/professeurs/$slug'
   fileRoutesByTo: FileRoutesByTo
@@ -193,6 +204,7 @@ export interface FileRouteTypes {
     | '/mon-dahara'
     | '/prieres'
     | '/profil'
+    | '/reservations'
     | '/bibliotheque/$slug'
     | '/professeurs/$slug'
   id:
@@ -211,6 +223,7 @@ export interface FileRouteTypes {
     | '/_authenticated/mon-dahara'
     | '/_authenticated/prieres'
     | '/_authenticated/profil'
+    | '/_authenticated/reservations'
     | '/bibliotheque/$slug'
     | '/professeurs/$slug'
   fileRoutesById: FileRoutesById
@@ -328,6 +341,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedProfilRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/reservations': {
+      id: '/_authenticated/reservations'
+      path: '/reservations'
+      fullPath: '/reservations'
+      preLoaderRoute: typeof AuthenticatedReservationsRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/bibliotheque/$slug': {
       id: '/bibliotheque/$slug'
       path: '/$slug'
@@ -350,6 +370,7 @@ interface AuthenticatedRouteRouteChildren {
   AuthenticatedMonDaharaRoute: typeof AuthenticatedMonDaharaRoute
   AuthenticatedPrieresRoute: typeof AuthenticatedPrieresRoute
   AuthenticatedProfilRoute: typeof AuthenticatedProfilRoute
+  AuthenticatedReservationsRoute: typeof AuthenticatedReservationsRoute
 }
 
 const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
@@ -357,6 +378,7 @@ const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedMonDaharaRoute: AuthenticatedMonDaharaRoute,
   AuthenticatedPrieresRoute: AuthenticatedPrieresRoute,
   AuthenticatedProfilRoute: AuthenticatedProfilRoute,
+  AuthenticatedReservationsRoute: AuthenticatedReservationsRoute,
 }
 
 const AuthenticatedRouteRouteWithChildren =
