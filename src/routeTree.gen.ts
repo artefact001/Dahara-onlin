@@ -23,6 +23,7 @@ import { Route as AuthenticatedMemorisationRouteImport } from './routes/_authent
 import { Route as AuthenticatedMonDaharaRouteImport } from './routes/_authenticated/mon-dahara'
 import { Route as AuthenticatedPrieresRouteImport } from './routes/_authenticated/prieres'
 import { Route as AuthenticatedProfilRouteImport } from './routes/_authenticated/profil'
+import { Route as BibliothequeSlugRouteImport } from './routes/bibliotheque.$slug'
 import { Route as ProfesseursSlugRouteImport } from './routes/professeurs.$slug'
 
 const IndexRoute = IndexRouteImport.update({
@@ -95,6 +96,11 @@ const AuthenticatedProfilRoute = AuthenticatedProfilRouteImport.update({
   path: '/profil',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
+const BibliothequeSlugRoute = BibliothequeSlugRouteImport.update({
+  id: '/$slug',
+  path: '/$slug',
+  getParentRoute: () => BibliothequeRoute,
+} as any)
 const ProfesseursSlugRoute = ProfesseursSlugRouteImport.update({
   id: '/$slug',
   path: '/$slug',
@@ -105,7 +111,7 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/a-propos': typeof AProposRoute
   '/auth': typeof AuthRoute
-  '/bibliotheque': typeof BibliothequeRoute
+  '/bibliotheque': typeof BibliothequeRouteWithChildren
   '/contact': typeof ContactRoute
   '/coran': typeof CoranRoute
   '/devenir-professeur': typeof DevenirProfesseurRoute
@@ -115,13 +121,14 @@ export interface FileRoutesByFullPath {
   '/mon-dahara': typeof AuthenticatedMonDaharaRoute
   '/prieres': typeof AuthenticatedPrieresRoute
   '/profil': typeof AuthenticatedProfilRoute
+  '/bibliotheque/$slug': typeof BibliothequeSlugRoute
   '/professeurs/$slug': typeof ProfesseursSlugRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/a-propos': typeof AProposRoute
   '/auth': typeof AuthRoute
-  '/bibliotheque': typeof BibliothequeRoute
+  '/bibliotheque': typeof BibliothequeRouteWithChildren
   '/contact': typeof ContactRoute
   '/coran': typeof CoranRoute
   '/devenir-professeur': typeof DevenirProfesseurRoute
@@ -131,6 +138,7 @@ export interface FileRoutesByTo {
   '/mon-dahara': typeof AuthenticatedMonDaharaRoute
   '/prieres': typeof AuthenticatedPrieresRoute
   '/profil': typeof AuthenticatedProfilRoute
+  '/bibliotheque/$slug': typeof BibliothequeSlugRoute
   '/professeurs/$slug': typeof ProfesseursSlugRoute
 }
 export interface FileRoutesById {
@@ -139,7 +147,7 @@ export interface FileRoutesById {
   '/_authenticated': typeof AuthenticatedRouteRouteWithChildren
   '/a-propos': typeof AProposRoute
   '/auth': typeof AuthRoute
-  '/bibliotheque': typeof BibliothequeRoute
+  '/bibliotheque': typeof BibliothequeRouteWithChildren
   '/contact': typeof ContactRoute
   '/coran': typeof CoranRoute
   '/devenir-professeur': typeof DevenirProfesseurRoute
@@ -149,6 +157,7 @@ export interface FileRoutesById {
   '/_authenticated/mon-dahara': typeof AuthenticatedMonDaharaRoute
   '/_authenticated/prieres': typeof AuthenticatedPrieresRoute
   '/_authenticated/profil': typeof AuthenticatedProfilRoute
+  '/bibliotheque/$slug': typeof BibliothequeSlugRoute
   '/professeurs/$slug': typeof ProfesseursSlugRoute
 }
 export interface FileRouteTypes {
@@ -167,6 +176,7 @@ export interface FileRouteTypes {
     | '/mon-dahara'
     | '/prieres'
     | '/profil'
+    | '/bibliotheque/$slug'
     | '/professeurs/$slug'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -183,6 +193,7 @@ export interface FileRouteTypes {
     | '/mon-dahara'
     | '/prieres'
     | '/profil'
+    | '/bibliotheque/$slug'
     | '/professeurs/$slug'
   id:
     | '__root__'
@@ -200,6 +211,7 @@ export interface FileRouteTypes {
     | '/_authenticated/mon-dahara'
     | '/_authenticated/prieres'
     | '/_authenticated/profil'
+    | '/bibliotheque/$slug'
     | '/professeurs/$slug'
   fileRoutesById: FileRoutesById
 }
@@ -208,7 +220,7 @@ export interface RootRouteChildren {
   AuthenticatedRouteRoute: typeof AuthenticatedRouteRouteWithChildren
   AProposRoute: typeof AProposRoute
   AuthRoute: typeof AuthRoute
-  BibliothequeRoute: typeof BibliothequeRoute
+  BibliothequeRoute: typeof BibliothequeRouteWithChildren
   ContactRoute: typeof ContactRoute
   CoranRoute: typeof CoranRoute
   DevenirProfesseurRoute: typeof DevenirProfesseurRoute
@@ -316,6 +328,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedProfilRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/bibliotheque/$slug': {
+      id: '/bibliotheque/$slug'
+      path: '/$slug'
+      fullPath: '/bibliotheque/$slug'
+      preLoaderRoute: typeof BibliothequeSlugRouteImport
+      parentRoute: typeof BibliothequeRoute
+    }
     '/professeurs/$slug': {
       id: '/professeurs/$slug'
       path: '/$slug'
@@ -343,6 +362,18 @@ const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
 const AuthenticatedRouteRouteWithChildren =
   AuthenticatedRouteRoute._addFileChildren(AuthenticatedRouteRouteChildren)
 
+interface BibliothequeRouteChildren {
+  BibliothequeSlugRoute: typeof BibliothequeSlugRoute
+}
+
+const BibliothequeRouteChildren: BibliothequeRouteChildren = {
+  BibliothequeSlugRoute: BibliothequeSlugRoute,
+}
+
+const BibliothequeRouteWithChildren = BibliothequeRoute._addFileChildren(
+  BibliothequeRouteChildren,
+)
+
 interface ProfesseursRouteChildren {
   ProfesseursSlugRoute: typeof ProfesseursSlugRoute
 }
@@ -360,7 +391,7 @@ const rootRouteChildren: RootRouteChildren = {
   AuthenticatedRouteRoute: AuthenticatedRouteRouteWithChildren,
   AProposRoute: AProposRoute,
   AuthRoute: AuthRoute,
-  BibliothequeRoute: BibliothequeRoute,
+  BibliothequeRoute: BibliothequeRouteWithChildren,
   ContactRoute: ContactRoute,
   CoranRoute: CoranRoute,
   DevenirProfesseurRoute: DevenirProfesseurRoute,
