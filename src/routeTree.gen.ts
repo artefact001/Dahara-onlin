@@ -26,6 +26,7 @@ import { Route as AuthenticatedProfilRouteImport } from './routes/_authenticated
 import { Route as AuthenticatedReservationsRouteImport } from './routes/_authenticated/reservations'
 import { Route as BibliothequeSlugRouteImport } from './routes/bibliotheque.$slug'
 import { Route as ProfesseursSlugRouteImport } from './routes/professeurs.$slug'
+import { Route as AuthenticatedClasseIdRouteImport } from './routes/_authenticated/classe.$id'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -113,6 +114,11 @@ const ProfesseursSlugRoute = ProfesseursSlugRouteImport.update({
   path: '/$slug',
   getParentRoute: () => ProfesseursRoute,
 } as any)
+const AuthenticatedClasseIdRoute = AuthenticatedClasseIdRouteImport.update({
+  id: '/classe/$id',
+  path: '/classe/$id',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -131,6 +137,7 @@ export interface FileRoutesByFullPath {
   '/reservations': typeof AuthenticatedReservationsRoute
   '/bibliotheque/$slug': typeof BibliothequeSlugRoute
   '/professeurs/$slug': typeof ProfesseursSlugRoute
+  '/classe/$id': typeof AuthenticatedClasseIdRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -149,6 +156,7 @@ export interface FileRoutesByTo {
   '/reservations': typeof AuthenticatedReservationsRoute
   '/bibliotheque/$slug': typeof BibliothequeSlugRoute
   '/professeurs/$slug': typeof ProfesseursSlugRoute
+  '/classe/$id': typeof AuthenticatedClasseIdRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -169,6 +177,7 @@ export interface FileRoutesById {
   '/_authenticated/reservations': typeof AuthenticatedReservationsRoute
   '/bibliotheque/$slug': typeof BibliothequeSlugRoute
   '/professeurs/$slug': typeof ProfesseursSlugRoute
+  '/_authenticated/classe/$id': typeof AuthenticatedClasseIdRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -189,6 +198,7 @@ export interface FileRouteTypes {
     | '/reservations'
     | '/bibliotheque/$slug'
     | '/professeurs/$slug'
+    | '/classe/$id'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -207,6 +217,7 @@ export interface FileRouteTypes {
     | '/reservations'
     | '/bibliotheque/$slug'
     | '/professeurs/$slug'
+    | '/classe/$id'
   id:
     | '__root__'
     | '/'
@@ -226,6 +237,7 @@ export interface FileRouteTypes {
     | '/_authenticated/reservations'
     | '/bibliotheque/$slug'
     | '/professeurs/$slug'
+    | '/_authenticated/classe/$id'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -362,6 +374,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ProfesseursSlugRouteImport
       parentRoute: typeof ProfesseursRoute
     }
+    '/_authenticated/classe/$id': {
+      id: '/_authenticated/classe/$id'
+      path: '/classe/$id'
+      fullPath: '/classe/$id'
+      preLoaderRoute: typeof AuthenticatedClasseIdRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
   }
 }
 
@@ -371,6 +390,7 @@ interface AuthenticatedRouteRouteChildren {
   AuthenticatedPrieresRoute: typeof AuthenticatedPrieresRoute
   AuthenticatedProfilRoute: typeof AuthenticatedProfilRoute
   AuthenticatedReservationsRoute: typeof AuthenticatedReservationsRoute
+  AuthenticatedClasseIdRoute: typeof AuthenticatedClasseIdRoute
 }
 
 const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
@@ -379,6 +399,7 @@ const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedPrieresRoute: AuthenticatedPrieresRoute,
   AuthenticatedProfilRoute: AuthenticatedProfilRoute,
   AuthenticatedReservationsRoute: AuthenticatedReservationsRoute,
+  AuthenticatedClasseIdRoute: AuthenticatedClasseIdRoute,
 }
 
 const AuthenticatedRouteRouteWithChildren =
