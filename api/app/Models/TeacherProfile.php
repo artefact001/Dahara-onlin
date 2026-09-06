@@ -2,10 +2,13 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class TeacherProfile extends Model
 {
+    use HasFactory;
+
     protected $fillable = [
         'user_id', 'slug', 'full_name', 'headline', 'bio', 'city', 'photo_path',
         'subjects', 'languages', 'levels', 'hourly_price', 'session_minutes',

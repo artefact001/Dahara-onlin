@@ -30,5 +30,11 @@ return Application::configure(basePath: dirname(__DIR__))
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions) {
-        //
+        // Monitoring d'erreurs prêt à activer : si le package sentry/sentry-laravel
+        // est installé ET que SENTRY_LARAVEL_DSN est renseignée, les exceptions non
+        // interceptées sont envoyées à Sentry. Sans ça, ce bloc ne fait rien —
+        // aucune dépendance obligatoire, aucun risque si tu n'utilises pas Sentry.
+        if (env('SENTRY_LARAVEL_DSN') && class_exists(\Sentry\Laravel\Integration::class)) {
+            \Sentry\Laravel\Integration::handles($exceptions);
+        }
     })->create();

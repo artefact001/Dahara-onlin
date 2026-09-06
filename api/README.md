@@ -143,7 +143,40 @@ installabilité optimale sur tous les appareils, ajoute de vraies icônes 192×1
 
 Restent en attente (Priorité 4 technique + Priorité 5 légale) : tests automatisés, hook monitoring, CGU/politique de confidentialité adaptées aux mineurs.
 
-## 11. Hébergement
+## 12. Tests automatisés
+
+24 tests PHPUnit couvrent les parcours critiques (`tests/Feature/`) :
+- `AuthTest` : inscription, génération du parcours de départ, échec de connexion, challenge 2FA
+- `BookingTest` : autorisation, essai gratuit sur la 1ère réservation, permissions confirmer/annuler
+- `ReviewTest` : impossible de noter sans séance terminée, une seule review par réservation
+- `ChildSafetyTest` : **le plus important** — un compte enfant géré ne peut parler qu'à son parent, un parent ne peut lire que les messages de son propre enfant, un compte banni ne peut plus utiliser l'API
+- `TeacherDirectoryTest` : seuls les professeurs validés apparaissent publiquement
+
+```bash
+composer install
+php artisan test        # ou : ./vendor/bin/phpunit
+```
+
+Utilise SQLite en mémoire (`phpunit.xml`), donc aucune base MySQL n'est nécessaire pour
+lancer les tests. **Non exécutés dans l'environnement de génération** (pas de
+`composer install` possible, cf. avertissement en tête de ce README) — à lancer en
+premier avant toute mise en production.
+
+## 13. Monitoring d'erreurs
+
+Prêt à activer, désactivé par défaut : `composer require sentry/sentry-laravel` puis
+renseigne `SENTRY_LARAVEL_DSN` dans `.env`. Sans ces deux conditions, le hook dans
+`bootstrap/app.php` ne fait rien (aucune dépendance obligatoire).
+
+## 14. Documents légaux (brouillons, à faire valider par un avocat)
+
+Deux modèles sont disponibles à la racine du dépôt (pas dans `api/`, car ils concernent
+toute la plateforme) : `legal/CGU.md` et `legal/politique-de-confidentialite.md`. Ils
+contiennent des sections `[à compléter]` et un avertissement explicite : **ce sont des
+brouillons de travail, pas des documents prêts à publier**, en particulier parce que la
+plateforme s'adresse à des mineurs et vise plusieurs pays.
+
+## 15. Hébergement
 
 Laravel a besoin d'un environnement PHP (pas de Cloudflare Workers) : un VPS, Laravel
 Forge, Laravel Cloud, ou un hébergement mutualisé PHP 8.2+/MySQL. Le frontend, lui, peut

@@ -2,11 +2,14 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Str;
 
 class Booking extends Model
 {
+    use HasFactory;
+
     protected $fillable = [
         'student_id', 'teacher_profile_id', 'teacher_availability_id', 'subject',
         'starts_at', 'duration_minutes', 'price', 'status', 'payment_status',

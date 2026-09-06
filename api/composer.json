@@ -10,6 +10,9 @@
         "laravel/sanctum": "^4.0",
         "laravel/tinker": "^2.9"
     },
+    "suggest": {
+        "sentry/sentry-laravel": "Active le monitoring d'erreurs si SENTRY_LARAVEL_DSN est renseignée (composer require sentry/sentry-laravel)"
+    },
     "require-dev": {
         "fakerphp/faker": "^1.23",
         "laravel/pint": "^1.13",
