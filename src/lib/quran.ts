@@ -63,7 +63,7 @@ export async function fetchBookmarks() {
   return (data ?? []) as Bookmark[];
 }
 
-export async function toggleBookmark(userId: string, surah: number, ayah: number, existing?: string) {
+export async function toggleBookmark(userId: string, surah: number, ayah: number, existing?: string | undefined) {
   if (existing) {
     const { error } = await supabase.from("quran_bookmarks").delete().eq("id", existing);
     if (error) throw new Error(error.message);
