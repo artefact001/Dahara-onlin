@@ -23,7 +23,10 @@ import { Route as AuthenticatedMemorisationRouteImport } from './routes/_authent
 import { Route as AuthenticatedMonDaharaRouteImport } from './routes/_authenticated/mon-dahara'
 import { Route as AuthenticatedPrieresRouteImport } from './routes/_authenticated/prieres'
 import { Route as AuthenticatedProfilRouteImport } from './routes/_authenticated/profil'
+import { Route as AuthenticatedReservationsRouteImport } from './routes/_authenticated/reservations'
+import { Route as BibliothequeSlugRouteImport } from './routes/bibliotheque.$slug'
 import { Route as ProfesseursSlugRouteImport } from './routes/professeurs.$slug'
+import { Route as AuthenticatedClasseIdRouteImport } from './routes/_authenticated/classe.$id'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -95,17 +98,33 @@ const AuthenticatedProfilRoute = AuthenticatedProfilRouteImport.update({
   path: '/profil',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
+const AuthenticatedReservationsRoute =
+  AuthenticatedReservationsRouteImport.update({
+    id: '/reservations',
+    path: '/reservations',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
+const BibliothequeSlugRoute = BibliothequeSlugRouteImport.update({
+  id: '/$slug',
+  path: '/$slug',
+  getParentRoute: () => BibliothequeRoute,
+} as any)
 const ProfesseursSlugRoute = ProfesseursSlugRouteImport.update({
   id: '/$slug',
   path: '/$slug',
   getParentRoute: () => ProfesseursRoute,
+} as any)
+const AuthenticatedClasseIdRoute = AuthenticatedClasseIdRouteImport.update({
+  id: '/classe/$id',
+  path: '/classe/$id',
+  getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/a-propos': typeof AProposRoute
   '/auth': typeof AuthRoute
-  '/bibliotheque': typeof BibliothequeRoute
+  '/bibliotheque': typeof BibliothequeRouteWithChildren
   '/contact': typeof ContactRoute
   '/coran': typeof CoranRoute
   '/devenir-professeur': typeof DevenirProfesseurRoute
@@ -115,13 +134,16 @@ export interface FileRoutesByFullPath {
   '/mon-dahara': typeof AuthenticatedMonDaharaRoute
   '/prieres': typeof AuthenticatedPrieresRoute
   '/profil': typeof AuthenticatedProfilRoute
+  '/reservations': typeof AuthenticatedReservationsRoute
+  '/bibliotheque/$slug': typeof BibliothequeSlugRoute
   '/professeurs/$slug': typeof ProfesseursSlugRoute
+  '/classe/$id': typeof AuthenticatedClasseIdRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/a-propos': typeof AProposRoute
   '/auth': typeof AuthRoute
-  '/bibliotheque': typeof BibliothequeRoute
+  '/bibliotheque': typeof BibliothequeRouteWithChildren
   '/contact': typeof ContactRoute
   '/coran': typeof CoranRoute
   '/devenir-professeur': typeof DevenirProfesseurRoute
@@ -131,7 +153,10 @@ export interface FileRoutesByTo {
   '/mon-dahara': typeof AuthenticatedMonDaharaRoute
   '/prieres': typeof AuthenticatedPrieresRoute
   '/profil': typeof AuthenticatedProfilRoute
+  '/reservations': typeof AuthenticatedReservationsRoute
+  '/bibliotheque/$slug': typeof BibliothequeSlugRoute
   '/professeurs/$slug': typeof ProfesseursSlugRoute
+  '/classe/$id': typeof AuthenticatedClasseIdRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -139,7 +164,7 @@ export interface FileRoutesById {
   '/_authenticated': typeof AuthenticatedRouteRouteWithChildren
   '/a-propos': typeof AProposRoute
   '/auth': typeof AuthRoute
-  '/bibliotheque': typeof BibliothequeRoute
+  '/bibliotheque': typeof BibliothequeRouteWithChildren
   '/contact': typeof ContactRoute
   '/coran': typeof CoranRoute
   '/devenir-professeur': typeof DevenirProfesseurRoute
@@ -149,7 +174,10 @@ export interface FileRoutesById {
   '/_authenticated/mon-dahara': typeof AuthenticatedMonDaharaRoute
   '/_authenticated/prieres': typeof AuthenticatedPrieresRoute
   '/_authenticated/profil': typeof AuthenticatedProfilRoute
+  '/_authenticated/reservations': typeof AuthenticatedReservationsRoute
+  '/bibliotheque/$slug': typeof BibliothequeSlugRoute
   '/professeurs/$slug': typeof ProfesseursSlugRoute
+  '/_authenticated/classe/$id': typeof AuthenticatedClasseIdRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -167,7 +195,10 @@ export interface FileRouteTypes {
     | '/mon-dahara'
     | '/prieres'
     | '/profil'
+    | '/reservations'
+    | '/bibliotheque/$slug'
     | '/professeurs/$slug'
+    | '/classe/$id'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -183,7 +214,10 @@ export interface FileRouteTypes {
     | '/mon-dahara'
     | '/prieres'
     | '/profil'
+    | '/reservations'
+    | '/bibliotheque/$slug'
     | '/professeurs/$slug'
+    | '/classe/$id'
   id:
     | '__root__'
     | '/'
@@ -200,7 +234,10 @@ export interface FileRouteTypes {
     | '/_authenticated/mon-dahara'
     | '/_authenticated/prieres'
     | '/_authenticated/profil'
+    | '/_authenticated/reservations'
+    | '/bibliotheque/$slug'
     | '/professeurs/$slug'
+    | '/_authenticated/classe/$id'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -208,7 +245,7 @@ export interface RootRouteChildren {
   AuthenticatedRouteRoute: typeof AuthenticatedRouteRouteWithChildren
   AProposRoute: typeof AProposRoute
   AuthRoute: typeof AuthRoute
-  BibliothequeRoute: typeof BibliothequeRoute
+  BibliothequeRoute: typeof BibliothequeRouteWithChildren
   ContactRoute: typeof ContactRoute
   CoranRoute: typeof CoranRoute
   DevenirProfesseurRoute: typeof DevenirProfesseurRoute
@@ -316,12 +353,33 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedProfilRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/reservations': {
+      id: '/_authenticated/reservations'
+      path: '/reservations'
+      fullPath: '/reservations'
+      preLoaderRoute: typeof AuthenticatedReservationsRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/bibliotheque/$slug': {
+      id: '/bibliotheque/$slug'
+      path: '/$slug'
+      fullPath: '/bibliotheque/$slug'
+      preLoaderRoute: typeof BibliothequeSlugRouteImport
+      parentRoute: typeof BibliothequeRoute
+    }
     '/professeurs/$slug': {
       id: '/professeurs/$slug'
       path: '/$slug'
       fullPath: '/professeurs/$slug'
       preLoaderRoute: typeof ProfesseursSlugRouteImport
       parentRoute: typeof ProfesseursRoute
+    }
+    '/_authenticated/classe/$id': {
+      id: '/_authenticated/classe/$id'
+      path: '/classe/$id'
+      fullPath: '/classe/$id'
+      preLoaderRoute: typeof AuthenticatedClasseIdRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
     }
   }
 }
@@ -331,6 +389,8 @@ interface AuthenticatedRouteRouteChildren {
   AuthenticatedMonDaharaRoute: typeof AuthenticatedMonDaharaRoute
   AuthenticatedPrieresRoute: typeof AuthenticatedPrieresRoute
   AuthenticatedProfilRoute: typeof AuthenticatedProfilRoute
+  AuthenticatedReservationsRoute: typeof AuthenticatedReservationsRoute
+  AuthenticatedClasseIdRoute: typeof AuthenticatedClasseIdRoute
 }
 
 const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
@@ -338,10 +398,24 @@ const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedMonDaharaRoute: AuthenticatedMonDaharaRoute,
   AuthenticatedPrieresRoute: AuthenticatedPrieresRoute,
   AuthenticatedProfilRoute: AuthenticatedProfilRoute,
+  AuthenticatedReservationsRoute: AuthenticatedReservationsRoute,
+  AuthenticatedClasseIdRoute: AuthenticatedClasseIdRoute,
 }
 
 const AuthenticatedRouteRouteWithChildren =
   AuthenticatedRouteRoute._addFileChildren(AuthenticatedRouteRouteChildren)
+
+interface BibliothequeRouteChildren {
+  BibliothequeSlugRoute: typeof BibliothequeSlugRoute
+}
+
+const BibliothequeRouteChildren: BibliothequeRouteChildren = {
+  BibliothequeSlugRoute: BibliothequeSlugRoute,
+}
+
+const BibliothequeRouteWithChildren = BibliothequeRoute._addFileChildren(
+  BibliothequeRouteChildren,
+)
 
 interface ProfesseursRouteChildren {
   ProfesseursSlugRoute: typeof ProfesseursSlugRoute
@@ -360,7 +434,7 @@ const rootRouteChildren: RootRouteChildren = {
   AuthenticatedRouteRoute: AuthenticatedRouteRouteWithChildren,
   AProposRoute: AProposRoute,
   AuthRoute: AuthRoute,
-  BibliothequeRoute: BibliothequeRoute,
+  BibliothequeRoute: BibliothequeRouteWithChildren,
   ContactRoute: ContactRoute,
   CoranRoute: CoranRoute,
   DevenirProfesseurRoute: DevenirProfesseurRoute,
