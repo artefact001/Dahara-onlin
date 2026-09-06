@@ -11,7 +11,7 @@ class TeacherController extends Controller
     // GET /api/teachers?subject=Coran&city=Dakar&level=Débutant
     public function index(Request $request)
     {
-        $query = TeacherProfile::verified()->with('user:id,full_name');
+        $query = TeacherProfile::valide()->with('user:id,full_name,email');
 
         if ($subject = $request->query('subject')) {
             $query->whereJsonContains('subjects', $subject);
@@ -31,8 +31,8 @@ class TeacherController extends Controller
     // GET /api/teachers/{slug}
     public function show(string $slug)
     {
-        $teacher = TeacherProfile::verified()
-            ->with(['user:id,full_name', 'availabilitySlots' => fn ($q) => $q->where('is_active', true)])
+        $teacher = TeacherProfile::valide()
+            ->with(['availability' => fn ($q) => $q->where('is_active', true)])
             ->where('slug', $slug)
             ->firstOrFail();
 

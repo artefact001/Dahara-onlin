@@ -7,16 +7,15 @@ use Illuminate\Database\Eloquent\Model;
 class TeacherProfile extends Model
 {
     protected $fillable = [
-        'user_id', 'slug', 'subjects', 'tags', 'city', 'price_fcfa',
-        'session_minutes', 'rating', 'reviews_count', 'languages',
-        'levels', 'bio', 'photo_path', 'verification_status',
+        'user_id', 'slug', 'full_name', 'headline', 'bio', 'city', 'photo_path',
+        'subjects', 'languages', 'levels', 'hourly_price', 'session_minutes',
+        'rating', 'reviews_count', 'status',
     ];
 
     protected function casts(): array
     {
         return [
             'subjects' => 'array',
-            'tags' => 'array',
             'languages' => 'array',
             'levels' => 'array',
             'rating' => 'decimal:1',
@@ -28,7 +27,7 @@ class TeacherProfile extends Model
         return $this->belongsTo(User::class);
     }
 
-    public function availabilitySlots()
+    public function availability()
     {
         return $this->hasMany(AvailabilitySlot::class);
     }
@@ -38,8 +37,8 @@ class TeacherProfile extends Model
         return $this->hasMany(Booking::class);
     }
 
-    public function scopeVerified($query)
+    public function scopeValide($query)
     {
-        return $query->where('verification_status', 'verifie');
+        return $query->where('status', 'valide');
     }
 }

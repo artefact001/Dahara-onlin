@@ -6,7 +6,9 @@ use Illuminate\Database\Eloquent\Model;
 
 class AvailabilitySlot extends Model
 {
-    protected $fillable = ['teacher_profile_id', 'day_of_week', 'start_time', 'is_active'];
+    protected $table = 'teacher_availability';
+
+    protected $fillable = ['teacher_profile_id', 'weekday', 'start_time', 'end_time', 'is_active'];
 
     protected function casts(): array
     {

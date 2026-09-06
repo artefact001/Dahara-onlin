@@ -6,8 +6,10 @@ use App\Http\Controllers\Api\BookingController;
 use App\Http\Controllers\Api\ContactController;
 use App\Http\Controllers\Api\GoalController;
 use App\Http\Controllers\Api\LearningPathController;
+use App\Http\Controllers\Api\LibraryController;
 use App\Http\Controllers\Api\PrayerReminderController;
 use App\Http\Controllers\Api\ProfileController;
+use App\Http\Controllers\Api\QuranController;
 use App\Http\Controllers\Api\SurahProgressController;
 use App\Http\Controllers\Api\TeacherApplicationController;
 use App\Http\Controllers\Api\TeacherController;
@@ -23,7 +25,13 @@ Route::get('/teachers/{slug}', [TeacherController::class, 'show']);
 Route::post('/contact', [ContactController::class, 'store']);
 Route::post('/teacher-applications', [TeacherApplicationController::class, 'store']);
 
-// --- Authentifié (Sanctum) ---
+Route::get('/library/books', [LibraryController::class, 'index']);
+Route::get('/library/books/{book:slug}', [LibraryController::class, 'show']);
+
+Route::get('/quran/surahs', [QuranController::class, 'surahs']);
+Route::get('/quran/surahs/{number}', [QuranController::class, 'surah']);
+
+// --- Authentifié (Sanctum, token Bearer) ---
 Route::middleware('auth:sanctum')->group(function () {
     Route::post('/auth/logout', [AuthController::class, 'logout']);
     Route::get('/auth/me', [AuthController::class, 'me']);
@@ -49,6 +57,18 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/bookings', [BookingController::class, 'index']);
     Route::post('/bookings', [BookingController::class, 'store']);
     Route::patch('/bookings/{booking}', [BookingController::class, 'update']);
+    Route::get('/bookings/{booking}/room', [BookingController::class, 'room']);
+
+    Route::get('/library/favorites', [LibraryController::class, 'favorites']);
+    Route::post('/library/books/{book}/favorite', [LibraryController::class, 'toggleFavorite']);
+    Route::get('/library/progress', [LibraryController::class, 'progressIndex']);
+    Route::put('/library/books/{book}/progress', [LibraryController::class, 'updateProgress']);
+
+    Route::get('/quran/bookmarks', [QuranController::class, 'bookmarks']);
+    Route::post('/quran/bookmarks', [QuranController::class, 'addBookmark']);
+    Route::delete('/quran/bookmarks/{bookmark}', [QuranController::class, 'removeBookmark']);
+    Route::get('/quran/last-read', [QuranController::class, 'lastRead']);
+    Route::put('/quran/last-read', [QuranController::class, 'updateLastRead']);
 
     // --- Admin uniquement ---
     Route::middleware('role:admin')->prefix('admin')->group(function () {

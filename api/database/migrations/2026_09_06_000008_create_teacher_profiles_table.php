@@ -10,20 +10,22 @@ return new class extends Migration
     {
         Schema::create('teacher_profiles', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id')->unique()->constrained()->cascadeOnDelete();
+            $table->foreignId('user_id')->nullable()->unique()->constrained()->nullOnDelete();
             $table->string('slug')->unique();
-            $table->json('subjects');           // ["Arabe", "Coran", "Tajwid"]
-            $table->json('tags')->nullable();
-            $table->string('city')->default('Dakar');
-            $table->unsignedInteger('price_fcfa')->default(5000);
-            $table->unsignedInteger('session_minutes')->default(45);
-            $table->decimal('rating', 2, 1)->default(0);
-            $table->unsignedInteger('reviews_count')->default(0);
-            $table->json('languages')->nullable();
-            $table->json('levels')->nullable(); // ["Débutant", "Intermédiaire"]
+            $table->string('full_name');
+            $table->string('headline')->nullable();
             $table->text('bio')->nullable();
+            $table->string('city')->default('Dakar');
             $table->string('photo_path')->nullable();
-            $table->enum('verification_status', ['en_attente', 'verifie', 'refuse'])->default('en_attente');
+            $table->json('subjects');
+            $table->json('languages')->nullable();
+            $table->json('levels')->nullable();
+            $table->unsignedInteger('hourly_price')->default(5000);
+            $table->unsignedInteger('session_minutes')->default(45);
+            $table->decimal('rating', 2, 1)->default(5.0);
+            $table->unsignedInteger('reviews_count')->default(0);
+            // Aligné sur le schéma Supabase existant : en_attente | valide | refuse
+            $table->enum('status', ['en_attente', 'valide', 'refuse'])->default('en_attente');
             $table->timestamps();
         });
     }

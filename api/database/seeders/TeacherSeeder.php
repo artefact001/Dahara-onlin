@@ -4,99 +4,62 @@ namespace Database\Seeders;
 
 use App\Models\AvailabilitySlot;
 use App\Models\TeacherProfile;
-use App\Models\User;
-use App\Models\UserRole;
 use Illuminate\Database\Seeder;
-use Illuminate\Support\Facades\Hash;
 
-// Reprend les 3 professeurs de démonstration actuellement codés en dur
-// dans src/lib/site-data.ts côté frontend, pour les faire vivre en base réelle.
+// Reprend les professeurs de démonstration définis côté Lovable/Supabase
+// (supabase/migrations/20260906215502_...sql) pour garder les mêmes données de démo.
 class TeacherSeeder extends Seeder
 {
     public function run(): void
     {
         $teachers = [
             [
-                'full_name' => 'Ustadh Abdou',
-                'email' => 'abdou@dahara-online.com',
-                'slug' => 'ustadh-abdou',
-                'subjects' => ['Arabe', 'Coran', 'Tajwid'],
+                'slug' => 'serigne-abdou-sane',
+                'full_name' => 'Serigne Abdou Sane',
+                'headline' => 'Maître de récitation et de tajwid',
+                'bio' => "Vingt ans d'enseignement au dahra de Guédiawaye. Spécialiste du tajwid et de la mémorisation progressive pour les enfants comme pour les adultes.",
                 'city' => 'Dakar',
-                'price_fcfa' => 5000,
-                'session_minutes' => 45,
+                'subjects' => ['Coran', 'Tajwid', 'Mémorisation'],
+                'languages' => ['Wolof', 'Français', 'العربية'],
+                'hourly_price' => 6000,
                 'rating' => 4.9,
-                'reviews_count' => 128,
-                'languages' => ['Wolof', 'Français', 'العربية'],
-                'levels' => ['Débutant', 'Intermédiaire'],
-                'bio' => "Formé au dahra de Ndiassane puis diplômé en langue arabe, Ustadh Abdou accompagne enfants et adultes vers une lecture fluide du Coran, avec beaucoup de patience et une méthode progressive.",
-                'days' => [1, 3, 6], // Lun, Mer, Sam
+                'status' => 'valide',
             ],
             [
-                'full_name' => 'Mme Aïcha Sarr',
-                'email' => 'aicha@dahara-online.com',
-                'slug' => 'aicha-sarr',
-                'subjects' => ['Coran', 'Tajwid'],
-                'city' => 'Saint-Louis',
-                'price_fcfa' => 4000,
-                'session_minutes' => 40,
-                'rating' => 5.0,
-                'reviews_count' => 94,
-                'languages' => ['Wolof', 'العربية'],
-                'levels' => ['Débutant', 'Enfant'],
-                'bio' => "Spécialiste du tajwid pour les femmes et les enfants, Aïcha Sarr propose des séances courtes et régulières, centrées sur la prononciation et la mémorisation par petites unités.",
-                'days' => [2, 4], // Mar, Jeu
-            ],
-            [
-                'full_name' => 'Ustadh Moussa',
-                'email' => 'moussa@dahara-online.com',
-                'slug' => 'moussa-diop',
-                'subjects' => ['Arabe', 'Hadith', 'Fiqh'],
-                'city' => 'Dakar',
-                'price_fcfa' => 6000,
-                'session_minutes' => 50,
+                'slug' => 'oustaza-aicha-diallo',
+                'full_name' => 'Oustaza Aïcha Diallo',
+                'headline' => 'Langue arabe et sciences islamiques',
+                'bio' => "Diplômée en langue arabe, elle accompagne les débutantes et débutants avec douceur et méthode, de l'alphabet à la lecture fluide.",
+                'city' => 'Thiès',
+                'subjects' => ['Langue arabe', 'Fiqh', 'Coran'],
+                'languages' => ['Français', 'العربية'],
+                'hourly_price' => 5000,
                 'rating' => 4.8,
-                'reviews_count' => 76,
-                'languages' => ['Wolof', 'Français', 'العربية'],
-                'levels' => ['Intermédiaire', 'Avancé'],
-                'bio' => 'Enseignant en sciences islamiques, Ustadh Moussa aide les élèves avancés à approfondir le fiqh et le hadith avec une pédagogie exigeante et bienveillante.',
-                'days' => [1, 5],
+                'status' => 'valide',
+            ],
+            [
+                'slug' => 'oustaz-moussa-ba',
+                'full_name' => 'Oustaz Moussa Ba',
+                'headline' => 'Sira et éducation spirituelle',
+                'bio' => "Enseignant passionné de l'histoire du Prophète et de l'éthique musulmane, il rend chaque séance vivante et concrète.",
+                'city' => 'Saint-Louis',
+                'subjects' => ['Sira', 'Fiqh', 'Tajwid'],
+                'languages' => ['Wolof', 'Français'],
+                'hourly_price' => 4500,
+                'rating' => 4.7,
+                'status' => 'valide',
             ],
         ];
 
         foreach ($teachers as $t) {
-            $user = User::create([
-                'full_name' => $t['full_name'],
-                'email' => $t['email'],
-                'password' => Hash::make('changeme-'.str()->random(8)),
-                'city' => $t['city'],
-                'is_teacher' => true,
-                'bio' => $t['bio'],
-                'languages' => $t['languages'],
-            ]);
+            $profile = TeacherProfile::create($t);
 
-            UserRole::create(['user_id' => $user->id, 'role' => 'professeur']);
-
-            $profile = TeacherProfile::create([
-                'user_id' => $user->id,
-                'slug' => $t['slug'],
-                'subjects' => $t['subjects'],
-                'tags' => $t['subjects'],
-                'city' => $t['city'],
-                'price_fcfa' => $t['price_fcfa'],
-                'session_minutes' => $t['session_minutes'],
-                'rating' => $t['rating'],
-                'reviews_count' => $t['reviews_count'],
-                'languages' => $t['languages'],
-                'levels' => $t['levels'],
-                'bio' => $t['bio'],
-                'verification_status' => 'verifie',
-            ]);
-
-            foreach ($t['days'] as $day) {
+            foreach ([1, 2, 3, 4, 6] as $weekday) {
                 AvailabilitySlot::create([
                     'teacher_profile_id' => $profile->id,
-                    'day_of_week' => $day,
-                    'start_time' => '18:00:00',
+                    'weekday' => $weekday,
+                    'start_time' => '17:00:00',
+                    'end_time' => '20:00:00',
                     'is_active' => true,
                 ]);
             }
