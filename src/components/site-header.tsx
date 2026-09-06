@@ -9,6 +9,7 @@ const NAV = [
   { to: "/mon-dahara", label: "Mon Dahara" },
   { to: "/coran", label: "Coran" },
   { to: "/bibliotheque", label: "Bibliothèque" },
+  { to: "/reservations", label: "Mes cours" },
   { to: "/tarifs", label: "Tarifs" },
 ] as const;
 
