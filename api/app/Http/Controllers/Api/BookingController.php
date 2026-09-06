@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\AvailabilitySlot;
 use App\Models\Booking;
 use App\Models\TeacherProfile;
+use App\Services\GamificationService;
 use Illuminate\Http\Request;
 
 class BookingController extends Controller
@@ -73,7 +74,7 @@ class BookingController extends Controller
     }
 
     // PATCH /api/bookings/{booking} - annulation ou confirmation
-    public function update(Request $request, Booking $booking)
+    public function update(Request $request, Booking $booking, GamificationService $gamification)
     {
         $user = $request->user();
         $isStudent = $booking->student_id === $user->id;
@@ -90,6 +91,18 @@ class BookingController extends Controller
         }
 
         $booking->update($data);
+
+        if ($data['status'] === 'terminee') {
+            $student = $booking->student;
+            $isFirstCompleted = Booking::where('student_id', $student->id)->where('status', 'terminee')->count() === 1;
+
+            $gamification->awardPoints($student, 30, 'Cours terminé');
+            $gamification->recordActivity($student);
+
+            if ($isFirstCompleted) {
+                $gamification->awardBadge($student, 'premier_cours');
+            }
+        }
 
         return response()->json($booking->fresh());
     }

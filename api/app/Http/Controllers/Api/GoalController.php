@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Models\Goal;
+use App\Services\GamificationService;
 use Illuminate\Http\Request;
 
 class GoalController extends Controller
@@ -27,7 +28,7 @@ class GoalController extends Controller
         return response()->json($goal, 201);
     }
 
-    public function update(Request $request, Goal $goal)
+    public function update(Request $request, Goal $goal, GamificationService $gamification)
     {
         abort_unless($goal->user_id === $request->user()->id, 403);
 
@@ -36,7 +37,12 @@ class GoalController extends Controller
             'target_value' => 'sometimes|integer|min:1',
         ]);
 
+        $wasCompleted = $goal->current_value >= $goal->target_value;
         $goal->update($data);
+
+        if (! $wasCompleted && $goal->current_value >= $goal->target_value) {
+            $gamification->awardPoints($request->user(), 15, "Objectif atteint : {$goal->label}");
+        }
 
         return response()->json($goal->fresh());
     }

@@ -1,0 +1,13 @@
+{
+  "name": "Dahara Online",
+  "short_name": "Dahara",
+  "description": "Apprenez l'arabe, le Coran et les sciences islamiques avec des enseignants vérifiés.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#FBF7EF",
+  "theme_color": "#1F3D2B",
+  "orientation": "portrait-primary",
+  "icons": [
+    { "src": "/favicon.ico", "sizes": "48x48", "type": "image/x-icon" }
+  ]
+}

@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Models\MemorizationSession;
 use App\Models\SurahProgress;
+use App\Services\GamificationService;
 use Illuminate\Http\Request;
 
 class SurahProgressController extends Controller
@@ -27,7 +28,7 @@ class SurahProgressController extends Controller
         return response()->json($surahProgress->fresh());
     }
 
-    public function logSession(Request $request)
+    public function logSession(Request $request, GamificationService $gamification)
     {
         $data = $request->validate([
             'surah_number' => 'nullable|integer',
@@ -39,6 +40,9 @@ class SurahProgressController extends Controller
             'user_id' => $request->user()->id,
             'session_date' => now()->toDateString(),
         ]));
+
+        $gamification->recordActivity($request->user());
+        $gamification->awardPoints($request->user(), 10, 'Session de mémorisation');
 
         return response()->json($session, 201);
     }

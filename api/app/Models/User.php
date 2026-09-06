@@ -12,6 +12,7 @@ class User extends Authenticatable
     use HasApiTokens, HasFactory, Notifiable;
 
     protected $fillable = [
+        'managed_by_id',
         'full_name',
         'email',
         'password',
@@ -22,6 +23,7 @@ class User extends Authenticatable
         'is_teacher',
         'daily_minutes_goal',
         'weekly_verses_goal',
+        'points',
     ];
 
     protected $hidden = [
@@ -36,6 +38,7 @@ class User extends Authenticatable
             'password' => 'hashed',
             'languages' => 'array',
             'is_teacher' => 'boolean',
+            'banned_at' => 'datetime',
         ];
     }
 
@@ -82,5 +85,49 @@ class User extends Authenticatable
     public function bookingsAsStudent()
     {
         return $this->hasMany(Booking::class, 'student_id');
+    }
+
+    // --- Famille ---
+    public function managedBy()
+    {
+        return $this->belongsTo(User::class, 'managed_by_id');
+    }
+
+    public function managedChildren()
+    {
+        return $this->hasMany(User::class, 'managed_by_id');
+    }
+
+    public function childLinks()
+    {
+        return $this->hasMany(FamilyLink::class, 'parent_id');
+    }
+
+    public function isChildOf(User $parent): bool
+    {
+        return $this->managed_by_id === $parent->id
+            || FamilyLink::where('parent_id', $parent->id)->where('child_id', $this->id)->exists();
+    }
+
+    // --- Gamification ---
+    public function streak()
+    {
+        return $this->hasOne(Streak::class);
+    }
+
+    public function badges()
+    {
+        return $this->hasMany(UserBadge::class);
+    }
+
+    // --- Messagerie ---
+    public function conversations()
+    {
+        return Conversation::where('user_one_id', $this->id)->orWhere('user_two_id', $this->id);
+    }
+
+    public function isBanned(): bool
+    {
+        return $this->banned_at !== null;
     }
 }

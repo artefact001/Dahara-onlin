@@ -53,40 +53,77 @@ Côté frontend, remplacer `src/integrations/supabase/client.ts` par un petit cl
 qui stocke le token (ex: dans un cookie httpOnly via une route serveur TanStack Start,
 plus sûr qu'un simple localStorage) et l'attache à chaque appel `fetch`.
 
-## 5. Endpoints disponibles
+## 5. Endpoints disponibles (68 routes)
 
 **Publics**
 - `POST /api/auth/register`, `POST /api/auth/login`
 - `GET /api/teachers` (filtres `?subject=&city=&level=`), `GET /api/teachers/{slug}`
-- `POST /api/contact`
-- `POST /api/teacher-applications`
+- `POST /api/contact`, `POST /api/teacher-applications`
+- `GET /api/library/books`, `GET /api/library/books/{slug}`
+- `GET /api/quran/surahs`, `GET /api/quran/surahs/{number}?translation=&reciter=`
+- `GET /api/gamification/leaderboard`
 
 **Authentifiés** (`Authorization: Bearer <token>`)
-- `GET /api/auth/me`, `POST /api/auth/logout`
-- `GET/PUT /api/profile`
-- `GET /api/learning-paths`, `PATCH /api/path-steps/{id}`
-- `GET/POST /api/goals`, `PATCH/DELETE /api/goals/{id}`
-- `GET /api/prayer-reminders`, `PATCH /api/prayer-reminders/{id}`
-- `GET /api/surah-progress`, `PATCH /api/surah-progress/{id}`, `POST /api/memorization-sessions`
-- `GET/POST /api/bookings`, `PATCH /api/bookings/{id}` (confirmer/annuler)
+- Profil, parcours, objectifs, rappels de prière, suivi de sourates — inchangé
+- `GET/POST /api/bookings`, `PATCH /api/bookings/{id}`, `GET /api/bookings/{id}/room` (salle Jitsi)
+- `GET /api/library/favorites`, `POST /api/library/books/{id}/favorite`, `GET/PUT /api/library/progress`
+- `GET/POST /api/quran/bookmarks`, `DELETE /api/quran/bookmarks/{id}`, `GET/PUT /api/quran/last-read`
+- **Messagerie** : `GET/POST /api/conversations`, `GET/POST /api/conversations/{id}/messages`
+- **Devoirs** : `GET/POST /api/assignments`, `POST /api/assignments/{id}/submit`, `PATCH /api/assignment-submissions/{id}/grade`
+- **Espace professeur** : `GET /api/teacher/students`, `/planning`, `/revenue`, `GET/POST/PATCH/DELETE /api/teacher/availability`
+- **Gamification** : `GET /api/gamification/me` (points, série, badges)
+- **Famille** : `GET/POST /api/family/children`, `POST /api/family/link`, `GET /api/family/children/{id}/progress`
+- `POST /api/reports`
 
 **Admin** (`role:admin`)
-- `GET /api/admin/teacher-applications`
-- `PATCH /api/admin/teacher-profiles/{id}/verify`
+- `GET /api/admin/stats`
+- `GET /api/admin/teacher-applications`, `PATCH /api/admin/teacher-profiles/{id}/verify`
+- `GET /api/admin/reports`, `PATCH /api/admin/reports/{id}`
+- `PATCH /api/admin/users/{id}/ban`, `PATCH /api/admin/users/{id}/unban`
 
-## 6. Ce qui est couvert vs. ce qu'il reste à faire
+## 6. Tâche planifiée (relances automatiques)
 
-✅ Parité complète avec l'existant Supabase (auth, profil, objectifs, parcours,
-mémorisation, rappels de prière, suivi de sourates).
-✅ Nouveau : annuaire de professeurs en base (fini le codage en dur), réservation de
-séances avec créneaux, formulaire de contact et candidature enseignant qui persistent
-réellement.
+`php artisan dahara:send-reengagement-reminders` envoie un e-mail aux élèves inactifs
+depuis 3 jours (configurable via `--days=`). Elle est déjà planifiée quotidiennement à
+18h dans `routes/console.php`, mais **le planificateur Laravel doit être appelé par un
+vrai cron** sur ton serveur :
 
-❌ Pas encore fait (volontairement, pour rester réaliste) : paiement (Wave/Orange Money),
-visioconférence, envoi d'e-mails réel (le `TODO` est indiqué dans `ContactController`),
-espace admin complet, gamification.
+```
+* * * * * cd /chemin/vers/api && php artisan schedule:run >> /dev/null 2>&1
+```
 
-## 7. Hébergement
+## 7. Devoirs — stockage des fichiers audio
+
+Les dépôts audio sont stockés sur le disque `local` (`storage/app/private`), pas de
+service externe requis pour démarrer. Si le volume grandit, bascule vers un disque S3
+(ajoute `league/flysystem-aws-s3-v3` via Composer et un disque `s3` dans
+`config/filesystems.php`).
+
+## 8. Ce qui est couvert vs. ce qu'il reste à faire
+
+✅ Parité Supabase (auth, profil, objectifs, parcours, mémorisation, prières).
+✅ Annuaire professeurs, réservation avec agenda réel, bibliothèque, lecteur de Coran.
+✅ Messagerie élève↔professeur avec notification e-mail, devoirs (dépôt + correction).
+✅ Espace professeur complet (élèves, planning, revenus, gestion d'agenda).
+✅ Gamification (points, séries, badges, classement, relances automatiques).
+✅ Comptes famille (enfant géré ou lien vers un compte existant).
+✅ Administration (statistiques, modération, signalements, bannissement).
+✅ PWA installable (manifest + service worker côté frontend).
+
+❌ Volontairement pas fait — bloqué par des ressources externes que toi seul peux créer :
+- **Visioconférence réelle** : `room_name`/`recording_url` sont prêts dans `bookings`,
+  mais il faut déployer un serveur **Jitsi auto-hébergé** et brancher son SDK côté
+  frontend (widget `JitsiMeetExternalAPI`). Le domaine se configure via `JITSI_DOMAIN`.
+- **Paiements Wave + Orange Money** : les clés `WAVE_API_KEY`/`ORANGE_MONEY_API_KEY`
+  sont prévues dans `.env.example` et `config/services.php`, mais aucun appel réel n'est
+  fait — il faut créer les comptes marchands, obtenir les clés, puis écrire les
+  contrôleurs de paiement (webhooks d'encaissement, génération de factures PDF).
+
+⚠️ Icônes PWA : seul `favicon.ico` est référencé dans `manifest.json`. Pour une
+installabilité optimale sur tous les appareils, ajoute de vraies icônes 192×192 et
+512×512 (PNG) et mets à jour `public/manifest.json`.
+
+## 9. Hébergement
 
 Laravel a besoin d'un environnement PHP (pas de Cloudflare Workers) : un VPS, Laravel
 Forge, Laravel Cloud, ou un hébergement mutualisé PHP 8.2+/MySQL. Le frontend, lui, peut
