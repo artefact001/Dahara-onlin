@@ -123,7 +123,27 @@ service externe requis pour démarrer. Si le volume grandit, bascule vers un dis
 installabilité optimale sur tous les appareils, ajoute de vraies icônes 192×192 et
 512×512 (PNG) et mets à jour `public/manifest.json`.
 
-## 9. Hébergement
+## 10. Priorités 1-3 ajoutées (sécurité, différenciation, croissance)
+
+**Sécurité (P1)**
+- Avis vérifiés : `POST /api/bookings/{id}/review`, impossible sans séance `terminee`, une seule review par réservation, recalcul auto de la note moyenne du professeur
+- Comptes enfants gérés protégés : un compte `managed_by_id` ne peut échanger de messages qu'avec son parent (`MessagingController::guardManagedChild`) ; le parent peut consulter toutes les conversations de son enfant via `GET /api/family/children/{id}/messages`
+- Rate limiting : `throttle:5,1` sur login/register, `throttle:10,1` sur contact/candidature, `throttle:api` (60/min) globalement
+- **2FA maison (TOTP, RFC 6238)**, sans dépendance Composer externe — `POST /api/two-factor/enable|confirm|disable`. Le login renvoie `requires_2fa: true` + un `challenge_token` si activée ; `POST /api/auth/two-factor-challenge` complète la connexion. **Obligatoire pour les routes `/api/admin/*`** (middleware `require_2fa`). Le frontend doit afficher le QR à partir de l'`otpauth_uri` renvoyé (ex: librairie `qrcode.react`), aucune image n'est générée côté serveur.
+
+**Différenciation (P2)**
+- Test de positionnement : `GET /api/placement-quiz/questions` (public), `POST /api/placement-quiz/submit` (auth) → fixe `users.placement_level`
+- Calendrier hijri : `GET /api/calendar/hijri?date=` (algorithme tabulaire, sans API externe — précision ±1 jour vs annonce religieuse officielle, à indiquer comme "estimation")
+- Mode Ramadan automatique (pas de bascule manuelle) : `GET /api/calendar/ramadan-status`, se déclenche seul quand le calendrier hijri indique le mois de Ramadan
+
+**Croissance (P3)**
+- Parrainage : chaque utilisateur a un `referral_code` unique généré à l'inscription ; `POST /api/auth/register` accepte `referral_code` ; à la première séance terminée du filleul, 20 points pour lui + 50 points pour le parrain (`GET /api/referral/me`)
+- Essai gratuit : la toute première réservation d'un élève sur la plateforme est automatiquement à 0 FCFA (`bookings.is_trial`)
+- Relances automatiques segmentées (`dahara:send-reengagement-reminders`) : message différent pour élève inactif, professeur sans nouvelle réservation, et parent dont l'enfant géré est inactif
+
+Restent en attente (Priorité 4 technique + Priorité 5 légale) : tests automatisés, hook monitoring, CGU/politique de confidentialité adaptées aux mineurs.
+
+## 11. Hébergement
 
 Laravel a besoin d'un environnement PHP (pas de Cloudflare Workers) : un VPS, Laravel
 Forge, Laravel Cloud, ou un hébergement mutualisé PHP 8.2+/MySQL. Le frontend, lui, peut

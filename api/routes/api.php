@@ -25,14 +25,16 @@ use App\Http\Controllers\Api\TeacherDashboardController;
 use Illuminate\Support\Facades\Route;
 
 // --- Public ---
-Route::post('/auth/register', [AuthController::class, 'register']);
-Route::post('/auth/login', [AuthController::class, 'login']);
+Route::post('/auth/register', [AuthController::class, 'register'])->middleware('throttle:5,1');
+Route::post('/auth/login', [AuthController::class, 'login'])->middleware('throttle:5,1');
 
 Route::get('/teachers', [TeacherController::class, 'index']);
 Route::get('/teachers/{slug}', [TeacherController::class, 'show']);
+Route::get('/teachers/{slug}/reviews', [\App\Http\Controllers\Api\ReviewController::class, 'forTeacher']);
 
-Route::post('/contact', [ContactController::class, 'store']);
-Route::post('/teacher-applications', [TeacherApplicationController::class, 'store']);
+Route::post('/contact', [ContactController::class, 'store'])->middleware('throttle:10,1');
+Route::post('/teacher-applications', [TeacherApplicationController::class, 'store'])->middleware('throttle:10,1');
+Route::post('/auth/two-factor-challenge', [AuthController::class, 'twoFactorChallenge'])->middleware('throttle:5,1');
 
 Route::get('/library/books', [LibraryController::class, 'index']);
 Route::get('/library/books/{book:slug}', [LibraryController::class, 'show']);
@@ -41,6 +43,10 @@ Route::get('/quran/surahs', [QuranController::class, 'surahs']);
 Route::get('/quran/surahs/{number}', [QuranController::class, 'surah']);
 
 Route::get('/gamification/leaderboard', [GamificationController::class, 'leaderboard']);
+
+Route::get('/calendar/hijri', [\App\Http\Controllers\Api\CalendarController::class, 'hijri']);
+Route::get('/calendar/ramadan-status', [\App\Http\Controllers\Api\CalendarController::class, 'ramadanStatus']);
+Route::get('/placement-quiz/questions', [\App\Http\Controllers\Api\PlacementQuizController::class, 'questions']);
 
 // --- Authentifié (Sanctum, token Bearer) ---
 Route::middleware(['auth:sanctum', 'not_banned'])->group(function () {
@@ -69,6 +75,7 @@ Route::middleware(['auth:sanctum', 'not_banned'])->group(function () {
     Route::post('/bookings', [BookingController::class, 'store']);
     Route::patch('/bookings/{booking}', [BookingController::class, 'update']);
     Route::get('/bookings/{booking}/room', [BookingController::class, 'room']);
+    Route::post('/bookings/{booking}/review', [\App\Http\Controllers\Api\ReviewController::class, 'store']);
 
     Route::get('/library/favorites', [LibraryController::class, 'favorites']);
     Route::post('/library/books/{book}/favorite', [LibraryController::class, 'toggleFavorite']);
@@ -105,18 +112,27 @@ Route::middleware(['auth:sanctum', 'not_banned'])->group(function () {
 
     // --- Gamification ---
     Route::get('/gamification/me', [GamificationController::class, 'me']);
+    Route::get('/referral/me', [\App\Http\Controllers\Api\ReferralController::class, 'me']);
 
     // --- Comptes famille ---
     Route::get('/family/children', [FamilyController::class, 'index']);
     Route::post('/family/children', [FamilyController::class, 'storeManagedChild']);
     Route::post('/family/link', [FamilyController::class, 'linkExisting']);
     Route::get('/family/children/{child}/progress', [FamilyController::class, 'childProgress']);
+    Route::get('/family/children/{child}/messages', [FamilyController::class, 'childMessages']);
 
     // --- Signalements ---
     Route::post('/reports', [ReportController::class, 'store']);
 
-    // --- Admin uniquement ---
-    Route::middleware('role:admin')->prefix('admin')->group(function () {
+    // --- 2FA (l'utilisateur active/désactive lui-même sa propre 2FA) ---
+    Route::post('/two-factor/enable', [\App\Http\Controllers\Api\TwoFactorController::class, 'enable']);
+    Route::post('/two-factor/confirm', [\App\Http\Controllers\Api\TwoFactorController::class, 'confirm']);
+    Route::post('/two-factor/disable', [\App\Http\Controllers\Api\TwoFactorController::class, 'disable']);
+
+    Route::post('/placement-quiz/submit', [\App\Http\Controllers\Api\PlacementQuizController::class, 'submit']);
+
+    // --- Admin uniquement (2FA obligatoire en plus du rôle) ---
+    Route::middleware(['role:admin', 'require_2fa'])->prefix('admin')->group(function () {
         Route::get('/stats', [AdminStatsController::class, 'index']);
         Route::get('/teacher-applications', [TeacherVerificationController::class, 'pendingApplications']);
         Route::patch('/teacher-profiles/{teacherProfile}/verify', [TeacherVerificationController::class, 'verify']);

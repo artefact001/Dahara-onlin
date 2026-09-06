@@ -109,6 +109,17 @@ class User extends Authenticatable
             || FamilyLink::where('parent_id', $parent->id)->where('child_id', $this->id)->exists();
     }
 
+    // --- Parrainage ---
+    public function referredBy()
+    {
+        return $this->belongsTo(User::class, 'referred_by_id');
+    }
+
+    public function referrals()
+    {
+        return $this->hasMany(User::class, 'referred_by_id');
+    }
+
     // --- Gamification ---
     public function streak()
     {

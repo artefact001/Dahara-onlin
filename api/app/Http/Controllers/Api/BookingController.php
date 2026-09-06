@@ -58,6 +58,8 @@ class BookingController extends Controller
             abort_if($alreadyBooked, 409, 'Ce créneau est déjà réservé.');
         }
 
+        $isTrial = Booking::where('student_id', $request->user()->id)->doesntExist();
+
         $booking = Booking::create([
             'student_id' => $request->user()->id,
             'teacher_profile_id' => $teacher->id,
@@ -65,9 +67,10 @@ class BookingController extends Controller
             'subject' => $data['subject'],
             'starts_at' => $data['starts_at'],
             'duration_minutes' => $data['duration_minutes'] ?? $teacher->session_minutes,
-            'price' => $teacher->hourly_price,
+            'price' => $isTrial ? 0 : $teacher->hourly_price,
+            'is_trial' => $isTrial,
             'status' => 'en_attente',
-            'payment_status' => 'non_paye',
+            'payment_status' => $isTrial ? 'paye' : 'non_paye', // "payé" = rien à encaisser, gratuit
         ]);
 
         return response()->json($booking->load('teacherProfile:id,slug,full_name'), 201);
@@ -101,6 +104,11 @@ class BookingController extends Controller
 
             if ($isFirstCompleted) {
                 $gamification->awardBadge($student, 'premier_cours');
+
+                if ($student->referred_by_id) {
+                    $gamification->awardPoints($student, 20, 'Bonus de bienvenue (parrainage)');
+                    $gamification->awardPoints($student->referredBy, 50, "Filleul actif : {$student->full_name}");
+                }
             }
         }
 

@@ -70,4 +70,18 @@ class FamilyController extends Controller
             'streak' => $child->streak,
         ]);
     }
+
+    // GET /api/family/children/{child}/messages - transparence : le parent voit tous les
+    // échanges de son enfant, condition de sécurité pour autoriser la messagerie des mineurs.
+    public function childMessages(Request $request, User $child)
+    {
+        abort_unless($child->isChildOf($request->user()), 403);
+
+        $conversations = \App\Models\Conversation::where('user_one_id', $child->id)
+            ->orWhere('user_two_id', $child->id)
+            ->with(['messages.sender:id,full_name', 'userOne:id,full_name', 'userTwo:id,full_name'])
+            ->get();
+
+        return response()->json($conversations);
+    }
 }

@@ -44,6 +44,9 @@ class MessagingController extends Controller
             'booking_id' => 'nullable|exists:bookings,id',
         ]);
 
+        $other = User::findOrFail($data['user_id']);
+        $this->guardManagedChild($request->user(), $other);
+
         [$one, $two] = [$request->user()->id, (int) $data['user_id']];
         if ($one > $two) {
             [$one, $two] = [$two, $one];
@@ -55,6 +58,22 @@ class MessagingController extends Controller
         );
 
         return response()->json($conversation, 201);
+    }
+
+    /**
+     * Sécurité enfants : un compte "géré" (créé par un parent, sans email propre)
+     * ne doit jamais échanger de messages non supervisés avec un adulte qui n'est
+     * pas son parent. Le parent peut, lui, communiquer librement en son nom.
+     */
+    private function guardManagedChild(User $initiator, User $other): void
+    {
+        foreach ([$initiator, $other] as $user) {
+            $counterpart = $user->id === $initiator->id ? $other : $initiator;
+
+            if ($user->managed_by_id !== null && $user->managed_by_id !== $counterpart->id) {
+                abort(403, "Ce compte enfant ne peut échanger de messages qu'avec son parent.");
+            }
+        }
     }
 
     // GET /api/conversations/{conversation}/messages
