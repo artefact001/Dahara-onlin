@@ -69,7 +69,7 @@ function CoranPage() {
   }, [lastRead.data?.surah_number]);
 
   const mark = useMutation({
-    mutationFn: (v: { ayah: number; existing?: string }) =>
+    mutationFn: (v: { ayah: number; existing?: string | undefined }) =>
       toggleBookmark(user!.id, current, v.ayah, v.existing),
     onSuccess: () => qc.invalidateQueries({ queryKey: ["quran-bookmarks", user?.id] }),
     onError: (e: Error) => toast.error("Échec", { description: e.message }),
