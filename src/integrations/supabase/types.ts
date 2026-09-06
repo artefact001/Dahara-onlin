@@ -14,6 +14,130 @@ export type Database = {
   }
   public: {
     Tables: {
+      book_favorites: {
+        Row: {
+          book_id: string
+          created_at: string
+          id: string
+          user_id: string
+        }
+        Insert: {
+          book_id: string
+          created_at?: string
+          id?: string
+          user_id: string
+        }
+        Update: {
+          book_id?: string
+          created_at?: string
+          id?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "book_favorites_book_id_fkey"
+            columns: ["book_id"]
+            isOneToOne: false
+            referencedRelation: "books"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      bookings: {
+        Row: {
+          created_at: string
+          duration_minutes: number
+          id: string
+          notes: string | null
+          price: number
+          recording_url: string | null
+          room_name: string
+          starts_at: string
+          status: string
+          student_id: string
+          subject: string
+          teacher_id: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          duration_minutes?: number
+          id?: string
+          notes?: string | null
+          price?: number
+          recording_url?: string | null
+          room_name?: string
+          starts_at: string
+          status?: string
+          student_id: string
+          subject: string
+          teacher_id: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          duration_minutes?: number
+          id?: string
+          notes?: string | null
+          price?: number
+          recording_url?: string | null
+          room_name?: string
+          starts_at?: string
+          status?: string
+          student_id?: string
+          subject?: string
+          teacher_id?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "bookings_teacher_id_fkey"
+            columns: ["teacher_id"]
+            isOneToOne: false
+            referencedRelation: "teacher_profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      books: {
+        Row: {
+          author: string
+          category: string
+          chapters: Json
+          cover_url: string | null
+          created_at: string
+          description: string | null
+          id: string
+          language: string
+          slug: string
+          title: string
+        }
+        Insert: {
+          author: string
+          category: string
+          chapters?: Json
+          cover_url?: string | null
+          created_at?: string
+          description?: string | null
+          id?: string
+          language?: string
+          slug: string
+          title: string
+        }
+        Update: {
+          author?: string
+          category?: string
+          chapters?: Json
+          cover_url?: string | null
+          created_at?: string
+          description?: string | null
+          id?: string
+          language?: string
+          slug?: string
+          title?: string
+        }
+        Relationships: []
+      }
       goals: {
         Row: {
           created_at: string
@@ -226,6 +350,89 @@ export type Database = {
         }
         Relationships: []
       }
+      quran_bookmarks: {
+        Row: {
+          ayah_number: number
+          created_at: string
+          id: string
+          note: string | null
+          surah_number: number
+          user_id: string
+        }
+        Insert: {
+          ayah_number: number
+          created_at?: string
+          id?: string
+          note?: string | null
+          surah_number: number
+          user_id: string
+        }
+        Update: {
+          ayah_number?: number
+          created_at?: string
+          id?: string
+          note?: string | null
+          surah_number?: number
+          user_id?: string
+        }
+        Relationships: []
+      }
+      quran_last_read: {
+        Row: {
+          ayah_number: number
+          surah_number: number
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          ayah_number?: number
+          surah_number?: number
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          ayah_number?: number
+          surah_number?: number
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      reading_progress: {
+        Row: {
+          book_id: string
+          chapter_index: number
+          id: string
+          last_read_at: string
+          percent: number
+          user_id: string
+        }
+        Insert: {
+          book_id: string
+          chapter_index?: number
+          id?: string
+          last_read_at?: string
+          percent?: number
+          user_id: string
+        }
+        Update: {
+          book_id?: string
+          chapter_index?: number
+          id?: string
+          last_read_at?: string
+          percent?: number
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "reading_progress_book_id_fkey"
+            columns: ["book_id"]
+            isOneToOne: false
+            referencedRelation: "books"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       surah_progress: {
         Row: {
           created_at: string
@@ -259,6 +466,95 @@ export type Database = {
           total_verses?: number
           updated_at?: string
           user_id?: string
+        }
+        Relationships: []
+      }
+      teacher_availability: {
+        Row: {
+          created_at: string
+          end_time: string
+          id: string
+          start_time: string
+          teacher_id: string
+          weekday: number
+        }
+        Insert: {
+          created_at?: string
+          end_time: string
+          id?: string
+          start_time: string
+          teacher_id: string
+          weekday: number
+        }
+        Update: {
+          created_at?: string
+          end_time?: string
+          id?: string
+          start_time?: string
+          teacher_id?: string
+          weekday?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "teacher_availability_teacher_id_fkey"
+            columns: ["teacher_id"]
+            isOneToOne: false
+            referencedRelation: "teacher_profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      teacher_profiles: {
+        Row: {
+          bio: string | null
+          city: string | null
+          created_at: string
+          full_name: string
+          headline: string | null
+          hourly_price: number
+          id: string
+          languages: string[]
+          photo_url: string | null
+          rating: number
+          slug: string
+          status: string
+          subjects: string[]
+          updated_at: string
+          user_id: string | null
+        }
+        Insert: {
+          bio?: string | null
+          city?: string | null
+          created_at?: string
+          full_name: string
+          headline?: string | null
+          hourly_price?: number
+          id?: string
+          languages?: string[]
+          photo_url?: string | null
+          rating?: number
+          slug: string
+          status?: string
+          subjects?: string[]
+          updated_at?: string
+          user_id?: string | null
+        }
+        Update: {
+          bio?: string | null
+          city?: string | null
+          created_at?: string
+          full_name?: string
+          headline?: string | null
+          hourly_price?: number
+          id?: string
+          languages?: string[]
+          photo_url?: string | null
+          rating?: number
+          slug?: string
+          status?: string
+          subjects?: string[]
+          updated_at?: string
+          user_id?: string | null
         }
         Relationships: []
       }
@@ -314,12 +610,12 @@ export type Tables<
   DefaultSchemaTableNameOrOptions extends
     | keyof (DefaultSchema["Tables"] & DefaultSchema["Views"])
     | { schema: keyof DatabaseWithoutInternals },
-  TableName extends DefaultSchemaTableNameOrOptions extends {
+  TableName extends (DefaultSchemaTableNameOrOptions extends {
     schema: keyof DatabaseWithoutInternals
   }
     ? keyof (DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Tables"] &
         DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Views"])
-    : never = never,
+    : never) = never,
 > = DefaultSchemaTableNameOrOptions extends {
   schema: keyof DatabaseWithoutInternals
 }
@@ -343,11 +639,11 @@ export type TablesInsert<
   DefaultSchemaTableNameOrOptions extends
     | keyof DefaultSchema["Tables"]
     | { schema: keyof DatabaseWithoutInternals },
-  TableName extends DefaultSchemaTableNameOrOptions extends {
+  TableName extends (DefaultSchemaTableNameOrOptions extends {
     schema: keyof DatabaseWithoutInternals
   }
     ? keyof DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Tables"]
-    : never = never,
+    : never) = never,
 > = DefaultSchemaTableNameOrOptions extends {
   schema: keyof DatabaseWithoutInternals
 }
@@ -368,11 +664,11 @@ export type TablesUpdate<
   DefaultSchemaTableNameOrOptions extends
     | keyof DefaultSchema["Tables"]
     | { schema: keyof DatabaseWithoutInternals },
-  TableName extends DefaultSchemaTableNameOrOptions extends {
+  TableName extends (DefaultSchemaTableNameOrOptions extends {
     schema: keyof DatabaseWithoutInternals
   }
     ? keyof DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Tables"]
-    : never = never,
+    : never) = never,
 > = DefaultSchemaTableNameOrOptions extends {
   schema: keyof DatabaseWithoutInternals
 }
@@ -393,11 +689,11 @@ export type Enums<
   DefaultSchemaEnumNameOrOptions extends
     | keyof DefaultSchema["Enums"]
     | { schema: keyof DatabaseWithoutInternals },
-  EnumName extends DefaultSchemaEnumNameOrOptions extends {
+  EnumName extends (DefaultSchemaEnumNameOrOptions extends {
     schema: keyof DatabaseWithoutInternals
   }
     ? keyof DatabaseWithoutInternals[DefaultSchemaEnumNameOrOptions["schema"]]["Enums"]
-    : never = never,
+    : never) = never,
 > = DefaultSchemaEnumNameOrOptions extends {
   schema: keyof DatabaseWithoutInternals
 }
@@ -410,11 +706,11 @@ export type CompositeTypes<
   PublicCompositeTypeNameOrOptions extends
     | keyof DefaultSchema["CompositeTypes"]
     | { schema: keyof DatabaseWithoutInternals },
-  CompositeTypeName extends PublicCompositeTypeNameOrOptions extends {
+  CompositeTypeName extends (PublicCompositeTypeNameOrOptions extends {
     schema: keyof DatabaseWithoutInternals
   }
     ? keyof DatabaseWithoutInternals[PublicCompositeTypeNameOrOptions["schema"]]["CompositeTypes"]
-    : never = never,
+    : never) = never,
 > = PublicCompositeTypeNameOrOptions extends {
   schema: keyof DatabaseWithoutInternals
 }
