@@ -46,7 +46,7 @@ export async function fetchFavorites() {
   return (data ?? []) as { id: string; book_id: string }[];
 }
 
-export async function toggleFavorite(userId: string, bookId: string, existingId?: string) {
+export async function toggleFavorite(userId: string, bookId: string, existingId?: string | undefined) {
   if (existingId) {
     const { error } = await supabase.from("book_favorites").delete().eq("id", existingId);
     if (error) throw new Error(error.message);
